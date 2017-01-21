@@ -1,0 +1,25 @@
+{
+  "name": "delorean",
+  "version": "1.0.0",
+  "description": "MobX time travel debugger and visualiztion tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/max-marcus/delorean.git"
+  },
+  "keywords": [
+    "MobX"
+  ],
+  "author": "Team Delorean",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/max-marcus/delorean/issues"
+  },
+  "homepage": "https://github.com/max-marcus/delorean#readme",
+  "dependencies": {
+    "mobx": "^3.0.2"
+  }
+}
