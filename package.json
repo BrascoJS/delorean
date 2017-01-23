@@ -1,29 +1,38 @@
 {
   "name": "delorean",
   "version": "1.0.0",
-  "description": "MobX time travel debugger and visualiztion tool",
-  "main": "index.js",
+  "description": "MobX time travel debugger and visualization tool",
+  "main": "lib/index.js",
+  "files": [
+    "src",
+    "lib",
+    "dist"
+  ],
   "scripts": {
-    "test": "npm test"
+    "clean": "rimraf lib",
+    "build:lib": "babel src --out-dir lib",
+    "build:umd": "webpack src/index.js dist/mobx-remotedev.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/mobx-remotedev.min.js --config webpack.config.production.js",
+    "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
+    "lint": "eslint src test",
+    "prepublish": "npm run lint && npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/max-marcus/delorean.git"
+    "url": "https://github.com/MobDeep/delorean.git"
   },
   "keywords": [
-    "MobX"
+    "mobx",
+    "devtools",
+    "time travel",
+    "live edit"
   ],
-  "author": "Team Delorean",
+  "author": "MobDeep (https://github.com/MobDeep)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/max-marcus/delorean/issues"
+    "url": "https://github.com/MobDeep/delorean/issues"
   },
-  "homepage": "https://github.com/max-marcus/delorean#readme",
-  "dependencies": {
-    "mobx": "^3.0.2",
-    "get-params": "^0.1.2",
-    "jsan": "^3.1.3"
-  },
+  "homepage": "https://github.com/MobDeep/delorean",
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
@@ -39,5 +48,28 @@
     "eslint-plugin-import": "^1.9.2",
     "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
+    "expect": "^1.20.1",
+    "mobx": "^2.5.1",
+    "mocha": "^2.5.3",
+    "rimraf": "^2.5.2",
     "webpack": "^1.13.1"
+  },
+  "peerDependencies": {
+    "mobx": ">=2.3.0"
+  },
+  "npmName": "mobx-remotedev",
+  "npmFileMap": [
+    {
+      "basePath": "/dist/",
+      "files": [
+        "*.js"
+      ]
+    }
+  ],
+  "dependencies": {
+    "get-params": "^0.1.2",
+    "jsan": "^3.1.3",
+    "remotedev": "^0.2.5",
+    "remotedev-utils": "^0.0.3"
+  }
 }
