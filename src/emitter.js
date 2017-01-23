@@ -3,25 +3,25 @@ import { stringify, parse } from 'jsan';
 const listeners = {};
 const history = [];
 
-function transformAction(action) {
+function formatAction(action) {
   if (action.action) return action;
-  const liftedAction = { timestamp: Date.now() };
+  const formattedAction = { timestamp: Date.now() };
   if (typeof action === 'object') {
-    liftedAction.action = action;
-    if (!action.type) liftedAction.action.type = action.id || action.actionType || 'update';
+    formattedAction.action = action;
+    if (!action.type) formattedAction.action.type = action.id || action.actionType || 'update';
   } else if (typeof action === 'undefined') {
-    liftedAction.action = 'update';
+    formattedAction.action = 'update';
   } else {
-    liftedAction.action = { type: action };
+    formattedAction.action = { type: action };
   }
-  return liftedAction;
+  return formattedAction;
 }
 
 function send(action, state, options, type, instanceId) {
   setTimeout(() => {
     const message = {
       payload: state ? stringify(state) : '',
-      action: type === 'ACTION' ? stringify(transformAction(action)) : action,
+      action: type === 'ACTION' ? stringify(formatAction(action)) : action,
       type: type || 'ACTION',
       instanceId,
       name: options.name

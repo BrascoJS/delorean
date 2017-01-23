@@ -2,7 +2,6 @@ import mobx from 'mobx';
 import { stringify, parse } from 'jsan';
 import getParams from 'get-params';
 import { silently, setValue, getMethods, interpretArgs, evalArgs, evalMethod } from './utils';
-import { emitter } from './emitter';
 
 
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
@@ -13,7 +12,7 @@ function dispatch(store, { type, arguments: args }) {
   }
 }
 
-function dispatchRemotely(store, payload) {
+function dispatchRemotely(emitter, store, payload) {
   try {
     evalMethod(payload, store);
   } catch (e) {
@@ -22,33 +21,32 @@ function dispatchRemotely(store, payload) {
 }
 
 function toggleAction(store, id, strState) {
-  const liftedState = parse(strState);
-  const idx = liftedState.skippedActionIds.indexOf(id);
+  const formattedState = parse(strState);
+  const idx = formattedState.skippedActionIds.indexOf(id);
   const skipped = idx !== -1;
-  const start = liftedState.stagedActionIds.indexOf(id);
-  if (start === -1) return liftedState;
+  const start = formattedState.stagedActionIds.indexOf(id);
+  if (start === -1) return formattedState;
 
-  setValue(store, liftedState.computedStates[start - 1].state);
-  for (let i = (skipped ? start : start + 1); i < liftedState.stagedActionIds.length; i++) {
+  setValue(store, formattedState.computedStates[start - 1].state);
+  for (let i = (skipped ? start : start + 1); i < formattedState.stagedActionIds.length; i++) {
     if (
-      i !== start && liftedState.skippedActionIds.indexOf(liftedState.stagedActionIds[i]) !== -1
+      i !== start && formattedState.skippedActionIds.indexOf(formattedState.stagedActionIds[i]) !== -1
     ) continue; // it's already skipped
-    dispatch(store, liftedState.actionsById[liftedState.stagedActionIds[i]].action);
-    liftedState.computedStates[i].state = mobx.toJS(store);
+    dispatch(store, formattedState.actionsById[formattedState.stagedActionIds[i]].action);
+    formattedState.computedStates[i].state = mobx.toJS(store);
   }
 
   if (skipped) {
-    liftedState.skippedActionIds.splice(idx, 1);
+    formattedState.skippedActionIds.splice(idx, 1);
   } else {
-    liftedState.skippedActionIds.push(id);
+    formattedState.skippedActionIds.push(id);
   }
-  return liftedState;
+  return formattedState;
 }
 
-export function dispatchMonitorAction(store, onlyActions) {
-  console.log('dispatched monitor action');
+export function dispatchMonitorAction(store, emitter, onlyActions) {
   const initValue = mobx.toJS(store);
-  // emitter.init(initValue, getMethods(store));
+  emitter.init(initValue, getMethods(store));
 
   return (message) => {
     if (message.type === 'DISPATCH') {
@@ -69,18 +67,17 @@ export function dispatchMonitorAction(store, onlyActions) {
         case 'TOGGLE_ACTION':
           if (!onlyActions) {
             console.warn(
-              '`onlyActions` parameter should be `true` to skip actions: ' +
-              'https://github.com/zalmoxisus/mobx-remotedev#remotedevstore-config'
+              '`onlyActions` parameter should be `true` to skip actions'
             );
             return;
           }
           emitter.send(null, toggleAction(store, message.payload.id, message.state));
           return;
         case 'IMPORT_STATE': {
-          const { nextLiftedState } = message.payload;
-          const { computedStates } = nextLiftedState;
+          const { nextFormattedState } = message.payload;
+          const { computedStates } = nextFormattedState;
           setValue(store, computedStates[computedStates.length - 1].state);
-          emitter.send(null, nextLiftedState);
+          emitter.send(null, nextFormattedState);
           return;
         }
       }
