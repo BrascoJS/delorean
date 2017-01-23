@@ -58,6 +58,10 @@ export default function spy(store, config) {
   let objName;
 
   mobx.spy((change) => {
+    // console.log('stores: ', stores);
+    // console.log('actions: ', onlyActions);
+    // console.log('monitors: ', monitors);
+    // console.log('scheduled', scheduled);
     if (change.spyReportStart) {
       objName = getName(change.object || change.target);
       if (change.type === 'reaction') {

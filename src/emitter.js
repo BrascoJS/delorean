@@ -1,6 +1,7 @@
 import { stringify, parse } from 'jsan';
 
 const listeners = {};
+const history = [];
 
 function transformAction(action) {
   if (action.action) return action;
@@ -25,7 +26,9 @@ function send(action, state, options, type, instanceId) {
       instanceId,
       name: options.name
     };
-    console.log(message); // STORE IN ARRAY AND LOCAL STORAGE
+    history.push(message);
+    console.log(history);
+    localStorage.setItem('appHistory', history);
   }, 0);
 }
 
