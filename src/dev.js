@@ -4,7 +4,7 @@ import getDecorator from './getDecorator';
 
 function dev(store, config) {
   if (
-    (!config || !config.remote) && (typeof window === 'undefined' /*** || !window.devToolsExtension ***/)
+    (!config || !config.remote) && (typeof window === 'undefined')
   ) {
     return store;
   }
