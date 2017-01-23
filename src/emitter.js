@@ -1,5 +1,7 @@
 import { stringify, parse } from 'jsan';
 
+const listeners = {};
+
 function transformAction(action) {
   if (action.action) return action;
   const liftedAction = { timestamp: Date.now() };
@@ -20,18 +22,15 @@ function send(action, state, options, type, instanceId) {
       payload: state ? stringify(state) : '',
       action: type === 'ACTION' ? stringify(transformAction(action)) : action,
       type: type || 'ACTION',
-      // id: socket.id,
       instanceId,
-      name: options.name // store name (from mobx.extras.getDebugName)
+      name: options.name
     };
-    // socket.emit(socket.id ? 'log' : 'log-noid', message);
     console.log(message); // STORE IN ARRAY AND LOCAL STORAGE
   }, 0);
 }
 
 export function emitter(options = {}) {
   const id = Math.random().toString(36).substr(2);
-  // start(options);
   return {
     init: (state, action) => {
       send(action || {}, state, options, 'INIT', id);

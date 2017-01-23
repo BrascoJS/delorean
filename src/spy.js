@@ -1,9 +1,8 @@
 import mobx from 'mobx';
-import { connectViaExtension } from 'remotedev';
-// https://github.com/zalmoxisus/remotedev/blob/master/src/devTools.js
 import { createAction, getName } from './utils';
 import { isFiltered } from './filters';
-import { emitter, dispatchMonitorAction } from './monitorActions';
+import { dispatchMonitorAction } from './monitorActions';
+import { emitter } from './emitter';
 
 let isSpyEnabled = false;
 let fallbackStoreName;
@@ -31,20 +30,15 @@ function init(store, config) {
   configure(name, config);
   stores[name] = store;
 
-  // const devTools = connectViaExtension(config);
-  // devTools.subscribe(dispatchMonitorAction(store, onlyActions[name]));
-  // monitors[name] = devTools;
-
   const devTools = emitter(config);
   devTools.subscribe(dispatchMonitorAction(store, onlyActions[name]));
   monitors[name] = devTools;
-
 
 }
 
 function schedule(name, action) {
   let toSend;
-  if (action /**** && !isFiltered(action, filters[name]) ****/) {
+  if (action && !isFiltered(action, filters[name])) {
     toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };
   }
   scheduled.push(toSend);
