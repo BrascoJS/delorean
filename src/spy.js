@@ -33,6 +33,7 @@ function init(store, config) {
   const emitTool = emitter(config);
   emitTool.subscribe(dispatchMonitorAction(store, emitTool, onlyActions[name]));
   monitors[name] = emitTool;
+  console.log('tool: ', emitTool);
 
 }
 
@@ -58,10 +59,7 @@ export default function spy(store, config) {
   let objName;
 
   mobx.spy((change) => {
-    // console.log('stores: ', stores);
-    // console.log('monitors: ', monitors);
-    // console.log('scheduled', scheduled);
-    console.log('only actions: ', onlyActions);
+
     if (change.spyReportStart) {
       objName = getName(change.object || change.target);
       if (change.type === 'reaction') {

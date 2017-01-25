@@ -1,7 +1,20 @@
 import { stringify, parse } from 'jsan';
 
-const listeners = {};
+export const listeners = {};
 const history = [];
+
+function handleMessages(message) {
+  if (!message.payload) message.payload = message.action;
+  Object.keys(listeners).forEach(id => {
+    if (message.instanceId && id !== message.instanceId) return;
+    if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
+    else {
+      listeners[id].forEach(fn => {
+        console.log('handling: ', fn(message));
+      });
+    }
+  });
+}
 
 function formatAction(action) {
   if (action.action) return action;
@@ -27,9 +40,18 @@ function send(action, state, options, type, instanceId) {
       name: options.name
     };
     history.push(message);
-    console.log('history: ', history);
     localStorage.setItem('appHistory', history);
+    handleMessages(message);
   }, 0);
+}
+
+export function dispatcher() {
+  listeners[123][0]({
+    type: 'DISPATCH',
+    payload: {
+      type: 'RESET'
+    }
+  });
 }
 
 export function emitter(options = {}) {
