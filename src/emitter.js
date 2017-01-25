@@ -27,7 +27,7 @@ function send(action, state, options, type, instanceId) {
       name: options.name
     };
     history.push(message);
-    console.log(history);
+    console.log('history: ', history);
     localStorage.setItem('appHistory', history);
   }, 0);
 }
