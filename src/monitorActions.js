@@ -3,7 +3,6 @@ import { stringify, parse } from 'jsan';
 import getParams from 'get-params';
 import { silently, setValue, getMethods, interpretArgs, evalArgs, evalMethod } from './utils';
 
-
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
 
 function dispatch(store, { type, arguments: args }) {
