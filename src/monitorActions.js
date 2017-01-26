@@ -52,11 +52,12 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
 
   // emitter.init(initValue, getMethods(store));
   return (message) => {
-
+    //console.log(message.type)
     if (message.type === 'DISPATCH') {
-
+      
       switch (message.payload.type) {
         case 'RESET':
+          console.log('sup im here')
           emitTool.init(setValue(store, initValue));
           return;
         case 'COMMIT':

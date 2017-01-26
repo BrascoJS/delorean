@@ -4,16 +4,32 @@ import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
 import {setValue} from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
+let theFunction;
 
-export function handleMessages(message, listeners) {
+export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
     else {
-      listeners[id].forEach(fn => {
-        fn(message);
-      });
+      // listeners[id].forEach(fn => {
+      //   console.log(listeners[id][0])
+      //   fn(message);
+      // });
+     // message.payload.type = 'RESET';
+
+
+    let  pmessage= JSON.parse(JSON.stringify(message));
+     pmessage.payload = JSON.parse(pmessage.payload);
+     pmessage.payload.type = 'RESET';
+    // console.log(listeners)
+     if(item !== null){
+      pmessage.type = 'DISPATCH';
+      //console.log(pmessage);
+      theFunction(pmessage);
+     }else{
+      listeners[id][0](pmessage);
+    }
     }
   });
 }
@@ -53,6 +69,7 @@ export function emitter(options = {}) {
   const listeners = {};
   const history = [];
   const id = Math.random().toString(36).substr(2);
+  localStorage.setItem('id', id);
   return {
     init: (state, action = {}) => {
       setTimeout(() => {
@@ -96,7 +113,11 @@ export function emitter(options = {}) {
           name: options.name
         };
         history.push(message);
-        localStorage.setItem('appHistory', history);
+        localStorage.setItem('appHistory', JSON.stringify(history));
+        let key = Object.keys(listeners);
+        let theKey = key[0];
+      //  console.log(listeners[theKey][0])
+        theFunction = listeners[theKey][0];
         handleMessages(message, listeners);
       }, 0);
     },
