@@ -16,12 +16,12 @@ function handleActive(tab) {
   alert(`A component tree will grow when this is clicked!`);
 }
 
-const Toolbar = () => (
+const Toolbar = (props) => (
   <Tabs>
     <Tab label="View Transitions" >
       <div>
         <h2 style={styles.headline}>Tab One</h2>
-        <SliderExampleStep />
+        <SliderExampleStep getData={props.getData} sendUpdate={props.sendUpdate} history={props.history} id={props.id} offset={props.offset} />
       </div>
     </Tab>
     <Tab label="View Changes in State" >

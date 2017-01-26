@@ -7,6 +7,7 @@ import dev from './dev.js';
 let theFunction;
 
 export function handleMessages(message, listeners, item = null) {
+  if(!message) return;
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
@@ -21,7 +22,7 @@ export function handleMessages(message, listeners, item = null) {
 
     let  pmessage= JSON.parse(JSON.stringify(message));
      pmessage.payload = JSON.parse(pmessage.payload);
-     pmessage.payload.type = 'RESET';
+     pmessage.payload.type = 'JUMP_TO_STATE';
     // console.log(listeners)
      if(item !== null){
       pmessage.type = 'DISPATCH';
@@ -80,8 +81,8 @@ export function emitter(options = {}) {
           id,
           name: options.name
         };
-        history.push(message);
-        localStorage.setItem('appHistory', history);
+        //history.push(message);
+        //localStorage.setItem('appHistory', history);
         console.log(history);
         handleMessages(message, listeners);
       }, 0);
@@ -112,8 +113,10 @@ export function emitter(options = {}) {
           id,
           name: options.name
         };
+        if(message.type === 'ACTION'){
         history.push(message);
         localStorage.setItem('appHistory', JSON.stringify(history));
+      }
         let key = Object.keys(listeners);
         let theKey = key[0];
       //  console.log(listeners[theKey][0])
@@ -122,7 +125,7 @@ export function emitter(options = {}) {
       }, 0);
     },
     error: (payload) => {
-      console.log(payload);
+      console.log('error dummy');
     }
   };
 }
