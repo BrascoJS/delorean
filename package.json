@@ -19,20 +19,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MobDeep/delorean.git"
+    "url": "https://github.com/BrascoJS/delorean.git"
   },
   "keywords": [
-    "mobx",
-    "devtools",
-    "time travel",
-    "live edit"
+    "mobx", "devtools", "time travel",
+    "react", "debugger", "debug", "D3"
   ],
-  "author": "MobDeep (https://github.com/MobDeep)",
+  "author":
+    "Max Marcus <https://github.com/max-marcus>, Mike Bieronski <https://github.com/mbieronski>, Morgan Pierson <https://github.com/morganpierson>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/MobDeep/delorean/issues"
+    "url": "https://github.com/BrascoJS/delorean/issues"
   },
-  "homepage": "https://github.com/MobDeep/delorean",
+  "homepage": "https://github.com/BrascoJS/delorean",
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
@@ -60,7 +59,7 @@
     "mobx": ">=2.3.0",
     "react": "^15.0.0"
   },
-  "npmName": "mobx-remotedev",
+  "npmName": "mobx-delorean",
   "npmFileMap": [
     {
       "basePath": "/dist/",

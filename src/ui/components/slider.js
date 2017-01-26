@@ -6,6 +6,7 @@ let value1 = Infinity;
  * The `step` property causes the slider to move in discrete increments.
  */
 
+
 const SliderExampleStep = (props) => {
 
 	const {getData, sendUpdate, history, id, offset=0} = props;
@@ -29,5 +30,6 @@ const SliderExampleStep = (props) => {
   <Slider step={stepNum} value={position} onChange={(e)=>{sendUpdate(e.screenX < value1); value1 = e.screenX;}} />
 )
 };
+
 
 export default SliderExampleStep;
