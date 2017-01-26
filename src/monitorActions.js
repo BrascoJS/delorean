@@ -82,7 +82,7 @@ export function dispatchMonitorAction(store, emitter, onlyActions) {
         }
       }
     } else if (message.type === 'ACTION') {
-      dispatchRemotely(store, message.payload);
+      dispatchRemotely(emitter, store, message.payload);
     }
   };
 }

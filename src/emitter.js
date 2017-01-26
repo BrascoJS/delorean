@@ -1,9 +1,10 @@
 import { stringify, parse } from 'jsan';
 
-export const listeners = {};
+const listeners = {};
 const history = [];
 
-function handleMessages(message) {
+export function handleMessages(message) {
+  console.log('listeners', listeners);
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
