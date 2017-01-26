@@ -1,4 +1,9 @@
 import { stringify, parse } from 'jsan';
+import { schedule } from './spy.js';
+import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
+import {setValue} from './utils.js';
+import getDecorator from './getDecorator.js';
+import dev from './dev.js';
 
 const listeners = {};
 const history = [];
@@ -27,8 +32,19 @@ function send(action, state, options, type, instanceId) {
       name: options.name
     };
     history.push(message);
-    console.log(history);
-    localStorage.setItem('appHistory', history);
+    let a = JSON.parse(localStorage.getItem('appHistory'));
+    if(a[a.length-1].type === 'ACTION') console.log(JSON.parse(a[a.length-1].action));
+   //console.log(a[a.length-1]);
+    //console.log(JSON.parse(localStorage.getItem('appHistory')));
+    localStorage.setItem('appHistory', JSON.stringify(history));
+
+    if(a.length >= 20){
+     
+      emitter.init(setValue(store, parse(a[4].payload)))
+       
+     
+       schedule(message);
+    }
   }, 0);
 }
 

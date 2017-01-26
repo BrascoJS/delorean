@@ -13,7 +13,7 @@ function dispatch(store, { type, arguments: args }) {
   }
 }
 
-function dispatchRemotely(store, payload) {
+export function dispatchRemotely(store, payload) {
   try {
     evalMethod(payload, store);
   } catch (e) {
@@ -48,10 +48,12 @@ function toggleAction(store, id, strState) {
 export function dispatchMonitorAction(store, onlyActions) {
   console.log('dispatched monitor action');
   const initValue = mobx.toJS(store);
-  // emitter.init(initValue, getMethods(store));
 
+  // emitter.init(initValue, getMethods(store));
   return (message) => {
+
     if (message.type === 'DISPATCH') {
+
       switch (message.payload.type) {
         case 'RESET':
           emitter.init(setValue(store, initValue));
@@ -85,6 +87,7 @@ export function dispatchMonitorAction(store, onlyActions) {
         }
       }
     } else if (message.type === 'ACTION') {
+
       dispatchRemotely(store, message.payload);
     }
   };

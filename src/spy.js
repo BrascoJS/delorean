@@ -36,7 +36,8 @@ function init(store, config) {
 
 }
 
-function schedule(name, action) {
+export function schedule(name, action) {
+  //console.log(name, action)
   let toSend;
   if (action && !isFiltered(action, filters[name])) {
     toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };
@@ -58,6 +59,7 @@ export default function spy(store, config) {
   let objName;
 
   mobx.spy((change) => {
+    //console.log(change)
     // console.log('stores: ', stores);
     // console.log('actions: ', onlyActions);
     // console.log('monitors: ', monitors);
