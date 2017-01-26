@@ -4,7 +4,7 @@ const listeners = {};
 const history = [];
 
 export function handleMessages(message) {
-  console.log('listeners', listeners);
+  console.log('listeners', history);
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
@@ -12,6 +12,7 @@ export function handleMessages(message) {
     else {
       listeners[id].forEach(fn => {
         console.log('handling: ', fn(message));
+        fn(message);
       });
     }
   });
@@ -44,15 +45,6 @@ function send(action, state, options, type, instanceId) {
     localStorage.setItem('appHistory', history);
     handleMessages(message);
   }, 0);
-}
-
-export function dispatcher() {
-  listeners[123][0]({
-    type: 'DISPATCH',
-    payload: {
-      type: 'RESET'
-    }
-  });
 }
 
 export function emitter(options = {}) {
