@@ -85,7 +85,7 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           const { nextFormattedState } = message.payload;
           const { computedStates } = nextFormattedState;
           setValue(store, computedStates[computedStates.length - 1].state);
-          emitTool.send(null, nextLiftedState);
+          emitTool.send(null, nextFormattedState);
           return;
         }
       }
