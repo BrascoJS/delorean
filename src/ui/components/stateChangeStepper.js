@@ -11,42 +11,15 @@ import Steps from './stateSteps';
  * A contrived example using a transition between steps
  */
 class StateChangeStepper extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
 
-  this.state = {
-    loading: false,
-    finished: false,
-    steps: []
-  };
-}
-
-  dummyAsync = (cb) => {
-    this.setState({ loading: true }, () => {
-      this.asyncTimer = setTimeout(cb, 10);
-    });
-  };
-
-  handleNext = () => {
-    const { stepIndex } = this.state;
-    if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
-      }));
-    }
-  };
-
-  handlePrev = () => {
-    const { stepIndex } = this.state;
-    if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex - 1,
-      }));
-    }
-  };
+    this.state = {
+      loading: false,
+      finished: false,
+      steps: []
+    };
+  }
 
 
 /* May have to change this function from switch statement to something else
@@ -79,6 +52,33 @@ in order to account for varying array lengths */
         return 'You\'re a long way from home sonny jim!';
     }
   }
+
+  dummyAsync = (cb) => {
+    this.setState({ loading: true }, () => {
+      this.asyncTimer = setTimeout(cb, 10);
+    });
+  };
+
+  handleNext = () => {
+    const { stepIndex } = this.state;
+    if (!this.state.loading) {
+      this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex + 1,
+        finished: stepIndex >= 2,
+      }));
+    }
+  };
+
+  handlePrev = () => {
+    const { stepIndex } = this.state;
+    if (!this.state.loading) {
+      this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex - 1,
+      }));
+    }
+  };
 
   renderContent() {
     const { finished, stepIndex } = this.state;

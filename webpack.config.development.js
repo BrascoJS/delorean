@@ -1,9 +1,7 @@
-'use strict';
+const webpack = require('webpack');
+const baseConfig = require('./webpack.config.base');
 
-var webpack = require('webpack');
-var baseConfig = require('./webpack.config.base');
-
-var config = Object.create(baseConfig);
+const config = Object.create(baseConfig);
 config.plugins = [
   new webpack.optimize.OccurenceOrderPlugin(),
   new webpack.DefinePlugin({

@@ -6,13 +6,10 @@ import {
 } from 'material-ui/Stepper';
 
 
-const Steps = (props) => {
-
-  return (
-    <Step>
-      <StepLabel>{props.stepIndex}</StepLabel>
-    </Step>
-  )
-}
+const Steps = (props) => (
+  <Step>
+    <StepLabel>{props.stepIndex}</StepLabel>
+  </Step>
+);
 
 export default Steps;
