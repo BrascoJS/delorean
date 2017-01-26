@@ -23,7 +23,7 @@ export function createAction(name, change) {
   } else {
     action = getPayload(change);
   }
-  action.type = `┃ ${name}`;
+  action.type = `${name}`;
 
   return action;
 }

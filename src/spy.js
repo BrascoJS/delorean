@@ -20,7 +20,7 @@ function configure(name, config = {}) {
   }
   if (config.filters) filters[name] = config.filters;
   if (config.global) {
-    if (fallbackStoreName) throw Error('You\'ve already defined a global store');
+    if (fallbackStoreName) throw Error('Global store already defined');
     fallbackStoreName = name;
   }
 }
@@ -58,14 +58,10 @@ export default function spy(store, config) {
   let objName;
 
   mobx.spy((change) => {
-    // console.log('stores: ', stores);
-    // console.log('actions: ', onlyActions);
-    // console.log('monitors: ', monitors);
-    // console.log('scheduled', scheduled);
+
     if (change.spyReportStart) {
       objName = getName(change.object || change.target);
       if (change.type === 'reaction') {
-        // TODO: show reactions
         schedule(objName);
         return;
       }
@@ -82,9 +78,9 @@ export default function spy(store, config) {
         const action = createAction(change.name);
         if (change.arguments && change.arguments.length) action.arguments = change.arguments;
         if (!onlyActions[objName]) {
-          schedule(objName, { ...action, type: `┏ ${action.type}` });
+          schedule(objName, { ...action, type: `${action.type}` });
           send();
-          schedule(objName, { ...action, type: `┗ ${action.type}` });
+          schedule(objName, { ...action, type: `${action.type}` });
         } else {
           schedule(objName, action);
         }
