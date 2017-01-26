@@ -1,24 +1,26 @@
-import React from 'react';
-import {
-  Step,
-  Stepper,
-  StepLabel,
-} from 'material-ui/Stepper';
+import React, {Component} from 'react';
+import { Step,
+Stepper,
+StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
-
+import Steps from './stateSteps';
 /**
  * A contrived example using a transition between steps
  */
-class StateChangeStepper extends React.Component {
+class StateChangeStepper extends Component {
+  constructor(props){
+    super(props)
 
-  state = {
+  this.state = {
     loading: false,
     finished: false,
     stepIndex: 0,
+    steps: []
   };
+}
 
   dummyAsync = (cb) => {
     this.setState({loading: true}, () => {
@@ -47,6 +49,9 @@ class StateChangeStepper extends React.Component {
     }
   };
 
+
+/* May have to change this function from switch statement to something else
+in order to account for varying array lengths */
   getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
@@ -58,7 +63,7 @@ class StateChangeStepper extends React.Component {
       case 1:
         return (
           <div>
-            <TextField style={{marginTop: 0}} />
+
             <p>
               This is another state change!
             </p>
@@ -92,7 +97,7 @@ class StateChangeStepper extends React.Component {
               }}
             >
               Click here
-            </a> to reset the example.
+            </a> to reset to initial state.
           </p>
         </div>
       );
@@ -121,6 +126,11 @@ class StateChangeStepper extends React.Component {
   render() {
     const {loading, stepIndex} = this.state;
 
+    // const stateSteps = this.state.steps.map((step, index) => {
+    //   return <Steps key={index} />
+    // })
+
+
     return (
       <div style={{width: '100%', maxWidth: 700, margin: 'auto'}}>
         <Stepper activeStep={stepIndex}>
@@ -133,6 +143,7 @@ class StateChangeStepper extends React.Component {
           <Step>
             <StepLabel>State Change 2</StepLabel>
           </Step>
+
         </Stepper>
         <ExpandTransition loading={loading} open={true}>
           {this.renderContent()}
