@@ -12,11 +12,11 @@ function dispatch(store, { type, arguments: args }) {
   }
 }
 
-function dispatchRemotely(emitter, store, payload) {
+function dispatchRemotely(emitTool, store, payload) {
   try {
     evalMethod(payload, store);
   } catch (e) {
-    emitter.error(e.message);
+    emitTool.error(e.message);
   }
 }
 
@@ -44,21 +44,22 @@ function toggleAction(store, id, strState) {
   return formattedState;
 }
 
-export function dispatchMonitorAction(store, emitter, onlyActions) {
+export function dispatchMonitorAction(store, emitTool, onlyActions) {
+  console.log('dispatched monitor action');
   const initValue = mobx.toJS(store);
-  emitter.init(initValue, getMethods(store));
+  emitTool.init(initValue, getMethods(store));
 
   return (message) => {
     if (message.type === 'DISPATCH') {
       switch (message.payload.type) {
         case 'RESET':
-          emitter.init(setValue(store, initValue));
+          emitTool.init(setValue(store, initValue));
           return;
         case 'COMMIT':
-          emitter.init(mobx.toJS(store));
+          emitTool.init(mobx.toJS(store));
           return;
         case 'ROLLBACK':
-          emitter.init(setValue(store, parse(message.state)));
+          emitTool.init(setValue(store, parse(message.state)));
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
@@ -71,18 +72,18 @@ export function dispatchMonitorAction(store, emitter, onlyActions) {
             );
             return;
           }
-          emitter.send(null, toggleAction(store, message.payload.id, message.state));
+          emitTool.send(null, toggleAction(store, message.payload.id, message.state));
           return;
         case 'IMPORT_STATE': {
           const { nextFormattedState } = message.payload;
           const { computedStates } = nextFormattedState;
           setValue(store, computedStates[computedStates.length - 1].state);
-          emitter.send(null, nextFormattedState);
+          emitTool.send(null, nextLiftedState);
           return;
         }
       }
     } else if (message.type === 'ACTION') {
-      dispatchRemotely(emitter, store, message.payload);
+      dispatchRemotely(emitTool, store, message.payload);
     }
   };
 }

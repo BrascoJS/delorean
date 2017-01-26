@@ -33,7 +33,6 @@ function init(store, config) {
   const emitTool = emitter(config);
   emitTool.subscribe(dispatchMonitorAction(store, emitTool, onlyActions[name]));
   monitors[name] = emitTool;
-  console.log('tool: ', emitTool);
 
 }
 
