@@ -122,7 +122,7 @@ export function emitter(options = {}) {
       }, 0);
     },
     error: (payload) => {
-      console.log(payload);
+      console.log('error dummy');
     }
   };
 }

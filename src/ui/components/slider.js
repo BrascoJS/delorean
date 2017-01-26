@@ -5,10 +5,24 @@ import Slider from 'material-ui/Slider';
  * By default, the slider is continuous.
  * The `step` property causes the slider to move in discrete increments.
  */
-const array = [1,2,3,4,5,3,4,3,2,4,5,4,3,4]
-const stepNum = 1 / array.length
-const SliderExampleStep = () => (
-  <Slider step={stepNum} value={0} />
-);
+
+const SliderExampleStep = (props) => {
+
+	const {getData, sendUpdate, history, id} = props;
+	let stepNum = 20;
+	const array = history;
+	if(!history){
+		 stepNum = 1 / 20;
+	}else{
+		 stepNum = 1 / array.length;
+	}
+
+	let value1 = 0;
+
+
+	return(
+  <Slider step={stepNum} onChange={(value)=>{sendUpdate(value.screenX < value1); value1 = value.screenX;}} />
+)
+};
 
 export default SliderExampleStep;
