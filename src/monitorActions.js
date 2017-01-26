@@ -48,13 +48,14 @@ function toggleAction(store, id, strState) {
 export function dispatchMonitorAction(store, emitTool, onlyActions) {
   console.log('dispatched monitor action');
   const initValue = mobx.toJS(store);
-
+  const theStore = store;
+  console.log(initValue)
 
   // emitter.init(initValue, getMethods(store));
   return (message) => {
     //console.log(message.type)
     if (message.type === 'DISPATCH') {
-      
+
       switch (message.payload.type) {
         case 'RESET':
           console.log('sup im here')
@@ -64,11 +65,12 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           emitTool.init(mobx.toJS(store));
           return;
         case 'ROLLBACK':
-          emitTool.init(setValue(store, parse(message.state)));
+          emitTool.init(setValue(theStore, message.state));
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
-          setValue(store, parse(message.state));
+        console.log(message.payload)
+          setValue(store, message.payload);
           return;
         case 'TOGGLE_ACTION':
           if (!onlyActions) {

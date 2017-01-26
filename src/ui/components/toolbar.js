@@ -21,7 +21,7 @@ const Toolbar = (props) => (
     <Tab label="View Transitions" >
       <div>
         <h2 style={styles.headline}>Tab One</h2>
-        <SliderExampleStep getData={props.getData} sendUpdate={props.sendUpdate} history={props.history} id={props.id} />
+        <SliderExampleStep getData={props.getData} sendUpdate={props.sendUpdate} history={props.history} id={props.id} offset={props.offset} />
       </div>
     </Tab>
     <Tab label="View Changes in State" >
