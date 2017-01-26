@@ -36,7 +36,8 @@ function init(store, config) {
 
 }
 
-function schedule(name, action) {
+export function schedule(name, action) {
+  //console.log(name, action)
   let toSend;
   if (action && !isFiltered(action, filters[name])) {
     toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };

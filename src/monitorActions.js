@@ -3,7 +3,6 @@ import { stringify, parse } from 'jsan';
 import getParams from 'get-params';
 import { silently, setValue, getMethods, interpretArgs, evalArgs, evalMethod } from './utils';
 
-
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
 
 function dispatch(store, { type, arguments: args }) {
@@ -12,7 +11,9 @@ function dispatch(store, { type, arguments: args }) {
   }
 }
 
+
 function dispatchRemotely(emitTool, store, payload) {
+
   try {
     evalMethod(payload, store);
   } catch (e) {
@@ -47,12 +48,16 @@ function toggleAction(store, id, strState) {
 export function dispatchMonitorAction(store, emitTool, onlyActions) {
   console.log('dispatched monitor action');
   const initValue = mobx.toJS(store);
-  emitTool.init(initValue, getMethods(store));
 
+
+  // emitter.init(initValue, getMethods(store));
   return (message) => {
+    //console.log(message.type)
     if (message.type === 'DISPATCH') {
+      
       switch (message.payload.type) {
         case 'RESET':
+          console.log('sup im here')
           emitTool.init(setValue(store, initValue));
           return;
         case 'COMMIT':
@@ -83,7 +88,9 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
         }
       }
     } else if (message.type === 'ACTION') {
+
       dispatchRemotely(emitTool, store, message.payload);
+
     }
   };
 }
