@@ -49,5 +49,7 @@ __Note__: Delorean relies on wrapping your MobX store export in order to track i
 Open your MobX app in the browser and notice the Delorean toolbar at the top of your app. In order from left to right:
 
 1) Time Travel Slider - Click to toggle the time travel slider's visibility. Drag and drop the position marker to traverse through the log of previous application states.
+
 2) Undo/Redo Actions - Step forward and back through your application's state one action at a time with specific details about each change.
+
 3) Store Structure Visualizer - Open a new tab with a rich heirarchy visualization of your MobX store's dependency tree. (coming soon)
