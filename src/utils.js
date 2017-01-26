@@ -1,4 +1,5 @@
 import mobx from 'mobx';
+import getParams from 'get-params';
 
 const getPayload = (change) => {
   const { added, addedCount, index, removed, removedCount } = change;
@@ -22,7 +23,7 @@ export function createAction(name, change) {
   } else {
     action = getPayload(change);
   }
-  action.type = `┃ ${name}`;
+  action.type = `${name}`;
 
   return action;
 }

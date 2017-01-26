@@ -10,7 +10,7 @@ module.exports = {
     ]
   },
   output: {
-    library: 'RemoteDev',
+    library: 'Delorean',
     libraryTarget: 'umd'
   },
   resolve: {

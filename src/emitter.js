@@ -8,44 +8,58 @@ import dev from './dev.js';
 const listeners = {};
 const history = [];
 
-function transformAction(action) {
+export function handleMessages(message) {
+  console.log('listeners', listeners);
+  if (!message.payload) message.payload = message.action;
+  Object.keys(listeners).forEach(id => {
+    if (message.instanceId && id !== message.instanceId) return;
+    if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
+    else {
+      listeners[id].forEach(fn => {
+        console.log('handling: ', fn(message));
+      });
+    }
+  });
+}
+
+function formatAction(action) {
   if (action.action) return action;
-  const liftedAction = { timestamp: Date.now() };
+  const formattedAction = { timestamp: Date.now() };
   if (typeof action === 'object') {
-    liftedAction.action = action;
-    if (!action.type) liftedAction.action.type = action.id || action.actionType || 'update';
+    formattedAction.action = action;
+    if (!action.type) formattedAction.action.type = action.id || action.actionType || 'update';
   } else if (typeof action === 'undefined') {
-    liftedAction.action = 'update';
+    formattedAction.action = 'update';
   } else {
-    liftedAction.action = { type: action };
+    formattedAction.action = { type: action };
   }
-  return liftedAction;
+  return formattedAction;
 }
 
 function send(action, state, options, type, instanceId) {
   setTimeout(() => {
     const message = {
       payload: state ? stringify(state) : '',
-      action: type === 'ACTION' ? stringify(transformAction(action)) : action,
+      action: type === 'ACTION' ? stringify(formatAction(action)) : action,
       type: type || 'ACTION',
       instanceId,
       name: options.name
     };
     history.push(message);
-    let a = JSON.parse(localStorage.getItem('appHistory'));
-    if(a[a.length-1].type === 'ACTION') console.log(JSON.parse(a[a.length-1].action));
-   //console.log(a[a.length-1]);
-    //console.log(JSON.parse(localStorage.getItem('appHistory')));
-    localStorage.setItem('appHistory', JSON.stringify(history));
 
-    if(a.length >= 20){
-     
-      emitter.init(setValue(store, parse(a[4].payload)))
-       
-     
-       schedule(message);
-    }
+    localStorage.setItem('appHistory', history);
+    handleMessages(message);
+
   }, 0);
+}
+
+export function dispatcher() {
+  listeners[123][0]({
+    type: 'DISPATCH',
+    payload: {
+      type: 'RESET'
+    }
+  });
 }
 
 export function emitter(options = {}) {
