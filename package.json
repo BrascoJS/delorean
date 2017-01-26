@@ -75,8 +75,6 @@
     "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-tap-event-plugin": "^2.0.1",
-    "react-toolbox": "^1.3.4",
-    "remotedev": "^0.2.5",
-    "remotedev-utils": "^0.0.3"
+    "react-toolbox": "^1.3.4"
   }
 }

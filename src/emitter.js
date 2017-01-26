@@ -1,17 +1,12 @@
 import { stringify, parse } from 'jsan';
 
-const listeners = {};
-const history = [];
-
-export function handleMessages(message) {
-  console.log('listeners', history);
+export function handleMessages(message, listeners) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
     else {
       listeners[id].forEach(fn => {
-        console.log('handling: ', fn(message));
         fn(message);
       });
     }
@@ -32,26 +27,40 @@ function formatAction(action) {
   return formattedAction;
 }
 
-function send(action, state, options, type, instanceId) {
-  setTimeout(() => {
-    const message = {
-      payload: state ? stringify(state) : '',
-      action: type === 'ACTION' ? stringify(formatAction(action)) : action,
-      type: type || 'ACTION',
-      instanceId,
-      name: options.name
-    };
-    history.push(message);
-    localStorage.setItem('appHistory', history);
-    handleMessages(message);
-  }, 0);
-}
+// function send(action, state, options, type, instanceId) {
+//   setTimeout(() => {
+//     const message = {
+//       payload: state ? stringify(state) : '',
+//       action: type === 'ACTION' ? stringify(formatAction(action)) : action,
+//       type: type || 'ACTION',
+//       instanceId,
+//       name: options.name
+//     };
+//     history.push(message);
+//     localStorage.setItem('appHistory', history);
+//     handleMessages(message);
+//   }, 0);
+// }
 
 export function emitter(options = {}) {
+  const listeners = {};
+  const history = [];
   const id = Math.random().toString(36).substr(2);
   return {
-    init: (state, action) => {
-      send(action || {}, state, options, 'INIT', id);
+    init: (state, action = {}) => {
+      setTimeout(() => {
+        const message = {
+          payload: state ? stringify(state) : '',
+          action,
+          type: 'INIT',
+          id,
+          name: options.name
+        };
+        history.push(message);
+        localStorage.setItem('appHistory', history);
+        console.log(history);
+        handleMessages(message, listeners);
+      }, 0);
     },
     subscribe: (listener) => {
       if (!listener) return undefined;
@@ -66,12 +75,23 @@ export function emitter(options = {}) {
     unsubscribe: () => {
       delete listeners[id];
     },
-    send: (action, payload) => {
+    send: (action, state) => {
+      let type = 'STATE';
       if (action) {
-        send(action, payload, options, 'ACTION', id);
-      } else {
-        send(undefined, payload, options, 'STATE', id);
+        type = 'ACTION';
       }
+      setTimeout(() => {
+        const message = {
+          payload: state ? stringify(state) : '',
+          action: type === 'ACTION' ? stringify(formatAction(action)) : action,
+          type: type || 'ACTION',
+          id,
+          name: options.name
+        };
+        history.push(message);
+        localStorage.setItem('appHistory', history);
+        handleMessages(message, listeners);
+      }, 0);
     },
     error: (payload) => {
       console.log(payload);
