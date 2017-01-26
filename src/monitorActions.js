@@ -2,7 +2,6 @@ import mobx from 'mobx';
 import { stringify, parse } from 'jsan';
 import getParams from 'get-params';
 import { silently, setValue, getMethods, interpretArgs, evalArgs, evalMethod } from './utils';
-import { emitter } from './emitter';
 
 
 export const isMonitorAction = (store) => store.__isRemotedevAction === true;
@@ -13,11 +12,11 @@ function dispatch(store, { type, arguments: args }) {
   }
 }
 
-function dispatchRemotely(store, payload) {
+function dispatchRemotely(emitTool, store, payload) {
   try {
     evalMethod(payload, store);
   } catch (e) {
-    emitter.error(e.message);
+    emitTool.error(e.message);
   }
 }
 
@@ -45,22 +44,22 @@ function toggleAction(store, id, strState) {
   return liftedState;
 }
 
-export function dispatchMonitorAction(store, onlyActions) {
+export function dispatchMonitorAction(store, emitTool, onlyActions) {
   console.log('dispatched monitor action');
   const initValue = mobx.toJS(store);
-  // emitter.init(initValue, getMethods(store));
+  emitTool.init(initValue, getMethods(store));
 
   return (message) => {
     if (message.type === 'DISPATCH') {
       switch (message.payload.type) {
         case 'RESET':
-          emitter.init(setValue(store, initValue));
+          emitTool.init(setValue(store, initValue));
           return;
         case 'COMMIT':
-          emitter.init(mobx.toJS(store));
+          emitTool.init(mobx.toJS(store));
           return;
         case 'ROLLBACK':
-          emitter.init(setValue(store, parse(message.state)));
+          emitTool.init(setValue(store, parse(message.state)));
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
@@ -74,18 +73,18 @@ export function dispatchMonitorAction(store, onlyActions) {
             );
             return;
           }
-          emitter.send(null, toggleAction(store, message.payload.id, message.state));
+          emitTool.send(null, toggleAction(store, message.payload.id, message.state));
           return;
         case 'IMPORT_STATE': {
           const { nextLiftedState } = message.payload;
           const { computedStates } = nextLiftedState;
           setValue(store, computedStates[computedStates.length - 1].state);
-          emitter.send(null, nextLiftedState);
+          emitTool.send(null, nextLiftedState);
           return;
         }
       }
     } else if (message.type === 'ACTION') {
-      dispatchRemotely(store, message.payload);
+      dispatchRemotely(emitTool, store, message.payload);
     }
   };
 }

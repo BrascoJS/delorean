@@ -30,9 +30,9 @@ function init(store, config) {
   configure(name, config);
   stores[name] = store;
 
-  const devTools = emitter(config);
-  devTools.subscribe(dispatchMonitorAction(store, onlyActions[name]));
-  monitors[name] = devTools;
+  const emitTool = emitter(config);
+  emitTool.subscribe(dispatchMonitorAction(store, emitTool, onlyActions[name]));
+  monitors[name] = emitTool;
 
 }
 
