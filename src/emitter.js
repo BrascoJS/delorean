@@ -14,12 +14,10 @@ export function handleMessages(message, listeners, item = null) {
     if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
     else {
       let pmessage = JSON.parse(JSON.stringify(message));
-      console.log('pmessage: ', pmessage);
       pmessage.payload = JSON.parse(pmessage.payload);
       pmessage.payload.type = 'JUMP_TO_STATE';
       if (item !== null) {
         pmessage.type = 'DISPATCH';
-        console.log('the function: ', theFunction);
         theFunction(pmessage);
       } else listeners[id][0](pmessage);
     }
@@ -70,7 +68,6 @@ export function emitter(options = {}) {
         };
         //history.push(message);
         //localStorage.setItem('appHistory', history);
-        console.log(history);
         handleMessages(message, listeners);
       }, 0);
     },
