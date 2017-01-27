@@ -8,8 +8,8 @@ import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import Steps from './stateSteps';
 //import {handleMessages} from './../../emitter';
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
+// import injectTapEventPlugin from 'react-tap-event-plugin';
+// injectTapEventPlugin();
 /**
  * A contrived example using a transition between steps
  */
