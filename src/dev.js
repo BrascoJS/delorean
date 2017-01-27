@@ -3,6 +3,7 @@ import spy from './spy';
 import getDecorator from './getDecorator';
 
 function dev(store, config) {
+  let stores
   if (
     (!config || !config.remote) && (typeof window === 'undefined')
   ) {
@@ -15,7 +16,7 @@ function dev(store, config) {
     /* eslint-disable no-param-reassign */
     if (!config) config = {};
     if (!config.name) config.name = store.name;
-   const stores = class extends store {
+    stores = class extends store {
       constructor(...args) {
         super(...args);
         spy(this, config);
