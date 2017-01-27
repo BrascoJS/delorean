@@ -1,36 +1,25 @@
 import { stringify, parse } from 'jsan';
 import { schedule } from './spy.js';
 import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
-import {setValue} from './utils.js';
+import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
 let theFunction;
 
 export function handleMessages(message, listeners, item = null) {
-  if(!message) return;
+  if (!message) return;
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
     else {
-      // listeners[id].forEach(fn => {
-      //   console.log(listeners[id][0])
-      //   fn(message);
-      // });
-     // message.payload.type = 'RESET';
-
-
-    let  pmessage= JSON.parse(JSON.stringify(message));
-     pmessage.payload = JSON.parse(pmessage.payload);
-     pmessage.payload.type = 'JUMP_TO_STATE';
-    // console.log(listeners)
-     if(item !== null){
-      pmessage.type = 'DISPATCH';
-      //console.log(pmessage);
-      theFunction(pmessage);
-     }else{
-      listeners[id][0](pmessage);
-    }
+      let pmessage = JSON.parse(JSON.stringify(message));
+      pmessage.payload = JSON.parse(pmessage.payload);
+      pmessage.payload.type = 'JUMP_TO_STATE';
+      if (item !== null) {
+        pmessage.type = 'DISPATCH';
+        theFunction(pmessage);
+      } else listeners[id][0](pmessage);
     }
   });
 }
@@ -38,14 +27,10 @@ export function handleMessages(message, listeners, item = null) {
 function formatAction(action) {
   if (action.action) return action;
   const formattedAction = { timestamp: Date.now() };
-  if (typeof action === 'object') {
-    formattedAction.action = action;
-    if (!action.type) formattedAction.action.type = action.id || action.actionType || 'update';
-  } else if (typeof action === 'undefined') {
-    formattedAction.action = 'update';
-  } else {
-    formattedAction.action = { type: action };
-  }
+  if (typeof action === 'object') formattedAction.action = action;
+  if (!action.type) formattedAction.action.type = action.id || action.actionType || 'update';
+  else if (typeof action === 'undefined') formattedAction.action = 'update';
+  else formattedAction.action = { type: action };
   return formattedAction;
 }
 
@@ -83,7 +68,6 @@ export function emitter(options = {}) {
         };
         //history.push(message);
         //localStorage.setItem('appHistory', history);
-        console.log(history);
         handleMessages(message, listeners);
       }, 0);
     },
@@ -113,19 +97,18 @@ export function emitter(options = {}) {
           id,
           name: options.name
         };
-        if(message.type === 'ACTION'){
-        history.push(message);
-        localStorage.setItem('appHistory', JSON.stringify(history));
-      }
+        if (message.type === 'ACTION') {
+          history.push(message);
+          localStorage.setItem('appHistory', JSON.stringify(history));
+        }
         let key = Object.keys(listeners);
         let theKey = key[0];
-      //  console.log(listeners[theKey][0])
         theFunction = listeners[theKey][0];
         handleMessages(message, listeners);
       }, 0);
     },
     error: (payload) => {
-      console.log('error dummy');
+      console.log(payload);
     }
   };
 }
