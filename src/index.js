@@ -8,6 +8,6 @@ if (process.env.NODE_ENV === 'development') {
  // module.exports = getDecorator(store => store);
 }
 
-export const delorean = dlorean(store => store);
+export const delorean = dlorean;
 export const Delorean = Dlorean;
 	
