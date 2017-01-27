@@ -3,7 +3,6 @@ import spy from './spy';
 import getDecorator from './getDecorator';
 
 function dev(store, config) {
-  let stores
   if (
     (!config || !config.remote) && (typeof window === 'undefined')
   ) {
@@ -16,7 +15,7 @@ function dev(store, config) {
     /* eslint-disable no-param-reassign */
     if (!config) config = {};
     if (!config.name) config.name = store.name;
-    stores = class extends store {
+    store = class extends store {
       constructor(...args) {
         super(...args);
         spy(this, config);
@@ -27,7 +26,7 @@ function dev(store, config) {
     console.warn(`Passed ${typeof store} to BRASCO, which is not an observable.`);
   }
 
-  return stores;
+  return store;
 }
 
 export default getDecorator(dev);
