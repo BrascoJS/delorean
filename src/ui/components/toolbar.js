@@ -12,26 +12,24 @@ const styles = {
   },
 };
 
-function handleActive(tab) {
-  alert(`A component tree will grow when this is clicked!`);
-}
+// function handleActive(tab) {
+//   alert(`A component tree will grow when this is clicked!`);
+// }
 
 const Toolbar = (props) => (
   <Tabs>
-    <Tab label="View Transitions" >
+    <Tab label="Time Travel" >
       <div>
-        <h2 style={styles.headline}>Tab One</h2>
         <SliderExampleStep getData={props.getData} sendUpdate={props.sendUpdate} history={props.history} id={props.id} offset={props.offset} />
       </div>
     </Tab>
-    <Tab label="View Changes in State" >
+    <Tab label="Undo/Redo" >
       <div>
         <StateChangeStepper />
       </div>
     </Tab>
     <Tab
-      label="View Your Component Tree"
-      onActive={handleActive}
+      label="Dependency Tree"
     >
       <div>
         <h2 style={styles.headline}>Plant Tree Here</h2>

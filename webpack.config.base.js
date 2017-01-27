@@ -8,7 +8,7 @@ module.exports = {
     ]
   },
   output: {
-    library: 'Delorean',
+    library: 'mobx-delorean',
     libraryTarget: 'umd'
   },
   resolve: {
