@@ -15,7 +15,7 @@ function dev(store, config) {
     /* eslint-disable no-param-reassign */
     if (!config) config = {};
     if (!config.name) config.name = store.name;
-   let stores = class extends store {
+   const stores = class extends store {
       constructor(...args) {
         super(...args);
         spy(this, config);
