@@ -17,6 +17,7 @@ function dev(store, config) {
     if (!config.name) config.name = store.name;
     store = class extends store {
       constructor(...args) {
+
         super(...args);
         spy(this, config);
       }
@@ -25,7 +26,7 @@ function dev(store, config) {
   } else {
     console.warn(`Passed ${typeof store} to BRASCO, which is not an observable.`);
   }
-
+  console.log('store, ', typeof store)
   return store;
 }
 
