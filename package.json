@@ -1,6 +1,6 @@
 {
   "name": "mobx-delorean",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "MobX time travel debugger and visualization tool",
   "main": "lib/index.js",
   "files": [
