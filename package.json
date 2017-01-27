@@ -1,5 +1,5 @@
 {
-  "name": "delorean",
+  "name": "mobx-delorean",
   "version": "1.0.0",
   "description": "MobX time travel debugger and visualization tool",
   "main": "lib/index.js",
@@ -15,7 +15,7 @@
     "build:umd:min": "webpack src/index.js dist/mobx-remotedev.min.js --config webpack.config.production.js",
     "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
     "lint": "eslint src test",
-    "prepublish": "npm run lint && npm run clean && npm run build"
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -48,7 +48,6 @@
     "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
     "expect": "^1.20.1",
-    "material-ui": "^0.16.7",
     "mobx": "^2.5.1",
     "mocha": "^2.5.3",
     "rimraf": "^2.5.2",
@@ -57,6 +56,7 @@
   },
   "peerDependencies": {
     "mobx": ">=2.3.0",
+    "material-ui": "^0.16.7",
     "react": "^15.0.0"
   },
   "npmName": "mobx-delorean",
