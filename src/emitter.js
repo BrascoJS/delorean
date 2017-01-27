@@ -7,8 +7,6 @@ import dev from './dev.js';
 let theFunction;
 
 export function handleMessages(message, listeners, item = null) {
-  console.log('message: ', message);
-  console.log('listeners: ', listeners);
   if (!message) return;
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
