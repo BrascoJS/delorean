@@ -24,7 +24,7 @@ const SliderExampleStep = (props) => {
 		position = 1;
 	}
 	
-	setTimeout(getData, 5000);
+	setTimeout(getData, 10000);
 
 	return(
   <Slider step={stepNum} value={position} onChange={(e)=>{sendUpdate(e.screenX < value1); value1 = e.screenX;}} />
