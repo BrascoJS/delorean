@@ -60,7 +60,6 @@
   },
   "peerDependencies": {
     "mobx": ">=2.3.0",
-    "material-ui": "^0.16.7",
     "react": "^15.0.0"
   },
   "npmName": "mobx-delorean",
@@ -74,6 +73,7 @@
   ],
   "dependencies": {
     "get-params": "^0.1.2",
+    "material-ui": "^0.16.7",
     "jsan": "^3.1.3",
     "react": "^15.4.2",
     "react-addons-css-transition-group": "^15.4.2",
