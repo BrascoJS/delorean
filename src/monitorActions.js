@@ -11,9 +11,7 @@ function dispatch(store, { type, arguments: args }) {
   }
 }
 
-
 function dispatchRemotely(emitTool, store, payload) {
-
   try {
     evalMethod(payload, store);
   } catch (e) {
@@ -31,34 +29,27 @@ function toggleAction(store, id, strState) {
   setValue(store, formattedState.computedStates[start - 1].state);
   for (let i = (skipped ? start : start + 1); i < formattedState.stagedActionIds.length; i++) {
     if (
-      i !== start && formattedState.skippedActionIds.indexOf(formattedState.stagedActionIds[i]) !== -1
+      i !== start &&
+      formattedState.skippedActionIds.indexOf(formattedState.stagedActionIds[i]) !== -1
     ) continue; // it's already skipped
     dispatch(store, formattedState.actionsById[formattedState.stagedActionIds[i]].action);
     formattedState.computedStates[i].state = mobx.toJS(store);
   }
 
-  if (skipped) {
-    formattedState.skippedActionIds.splice(idx, 1);
-  } else {
-    formattedState.skippedActionIds.push(id);
-  }
+  if (skipped) formattedState.skippedActionIds.splice(idx, 1);
+  else formattedState.skippedActionIds.push(id);
   return formattedState;
 }
 
 export function dispatchMonitorAction(store, emitTool, onlyActions) {
-  console.log('dispatched monitor action');
   const initValue = mobx.toJS(store);
   const theStore = store;
-  console.log(initValue)
+  emitTool.init(initValue, getMethods(store));
 
-  // emitter.init(initValue, getMethods(store));
   return (message) => {
-    //console.log(message.type)
     if (message.type === 'DISPATCH') {
-
       switch (message.payload.type) {
         case 'RESET':
-          console.log('sup im here')
           emitTool.init(setValue(store, initValue));
           return;
         case 'COMMIT':
@@ -69,14 +60,11 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
-        console.log(message.payload)
           setValue(store, message.payload);
           return;
         case 'TOGGLE_ACTION':
           if (!onlyActions) {
-            console.warn(
-              '`onlyActions` parameter should be `true` to skip actions'
-            );
+            console.warn('`onlyActions` parameter should be `true` to skip actions');
             return;
           }
           emitTool.send(null, toggleAction(store, message.payload.id, message.state));
@@ -89,10 +77,6 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           return;
         }
       }
-    } else if (message.type === 'ACTION') {
-
-      dispatchRemotely(emitTool, store, message.payload);
-
-    }
+    } else if (message.type === 'ACTION') dispatchRemotely(emitTool, store, message.payload);
   };
 }

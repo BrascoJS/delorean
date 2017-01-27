@@ -13,18 +13,12 @@ const getPayload = (change) => {
 };
 
 export function createAction(name, change) {
-  if (!change) { // is action
-    return { type: name };
-  }
-
+  if (!change) return { type: name }; // is action
   let action;
   if (typeof change.newValue !== 'undefined') {
     action = { [change.name]: mobx.toJS(change.newValue) };
-  } else {
-    action = getPayload(change);
-  }
+  } else action = getPayload(change);
   action.type = `${name}`;
-
   return action;
 }
 
@@ -45,9 +39,8 @@ export const silently = (fn, store) => {
 
 function setValueAction(store, state) {
   silently(() => {
-    if (store.importState) {
-      store.importState(state);
-    } else {
+    if (store.importState) store.importState(state);
+    else {
       Object.keys(state).forEach((key) => {
         store[key] = state[key];
       });
