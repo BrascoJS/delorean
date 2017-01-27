@@ -16,7 +16,7 @@ function dev(store, config) {
     if (!config) config = {};
     if (!config.name) config.name = store.name;
     store = class extends store {
-      console.log('before constructor');
+      
       constructor(...args) {
         console.log('in constructor')
         super(...args);
