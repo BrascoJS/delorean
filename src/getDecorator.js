@@ -6,7 +6,7 @@ export default function getDecorator(func) {
     	console.log('1')
       return store => func(store, storeOrConfig);
     }
-    console.log('2')
+    console.log('calling func')
     return func(storeOrConfig, config);
   };
 }
