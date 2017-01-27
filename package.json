@@ -1,6 +1,6 @@
 {
   "name": "mobx-delorean",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MobX time travel debugger and visualization tool",
   "main": "lib/index.js",
   "files": [
@@ -22,11 +22,15 @@
     "url": "https://github.com/BrascoJS/delorean.git"
   },
   "keywords": [
-    "mobx", "devtools", "time travel",
-    "react", "debugger", "debug", "D3"
+    "mobx",
+    "devtools",
+    "time travel",
+    "react",
+    "debugger",
+    "debug",
+    "D3"
   ],
-  "author":
-    "Max Marcus <https://github.com/max-marcus>, Mike Bieronski <https://github.com/mbieronski>, Morgan Pierson <https://github.com/morganpierson>",
+  "author": "Max Marcus <https://github.com/max-marcus>, Mike Bieronski <https://github.com/mbieronski>, Morgan Pierson <https://github.com/morganpierson>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/BrascoJS/delorean/issues"
