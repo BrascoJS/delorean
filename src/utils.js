@@ -76,6 +76,7 @@ export function getMethods(obj) {
 export const interpretArg = (arg) => (new Function('return ' + arg))();
 
 export function evalArgs(inArgs, restArgs) {
+
   const args = inArgs.map(interpretArg);
   if (!restArgs) return args;
   const rest = interpretArg(restArgs);
@@ -84,6 +85,8 @@ export function evalArgs(inArgs, restArgs) {
 }
 
 export function evalMethod(action, obj) {
+  action = JSON.stringify(action)
+
   if (typeof action === 'string') {
     return (new Function('return ' + action)).call(obj);
   }

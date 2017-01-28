@@ -10,7 +10,7 @@ export function handleMessages(message, listeners, item = null) {
   if (!message) return;
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
-    if (message.instanceId && id !== message.instanceId) return;
+    //if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       let pmessage = JSON.parse(JSON.stringify(message));
@@ -46,6 +46,7 @@ function send(action, state, options, type, instanceId, listeners, history) {
     };
     // if (message.type === 'ACTION') {
       history.push(message);
+      console.log(history)
       localStorage.setItem('appHistory', JSON.stringify(history));
     // }
     let key = Object.keys(listeners)[0];

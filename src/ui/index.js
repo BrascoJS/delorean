@@ -27,6 +27,7 @@ export default class Delorean extends Component {
   sendUpdate(pos) {
     let offset = this.state.offset;
     const message = this.state.history[this.state.history.length - offset - 1];
+    //const id = this.state.history[this.state.history.length - offset - 1].instanceId;
     if (pos) {
       handleMessages(message, { [this.state.id]: true }, 1);
       offset++;
