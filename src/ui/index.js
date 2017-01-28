@@ -19,21 +19,20 @@ export default class Delorean extends Component {
   }
 
   getData() {
-    let a = JSON.parse(localStorage.getItem('appHistory', history));
+    let a = JSON.parse(localStorage.getItem('appHistory'));
     let b = localStorage.getItem('id');
     this.setState({ history: a, id: b });
   }
 
   sendUpdate(pos) {
+    let offset = this.state.offset;
+    const message = this.state.history[this.state.history.length - offset - 1];
     if (pos) {
-      let offset = this.state.offset;
-      handleMessages(this.state.history[this.state.history.length - offset - 1], this.state.id, 1);
+      handleMessages(message, { [this.state.id]: true }, 1);
       offset++;
-      console.log('new offset: ', offset);
       this.setState({ offset });
     } else {
-      let offset = this.state.offset;
-      handleMessages(this.state.history[this.state.history.length - offset - 1], this.state.id, 1);
+      handleMessages(message, { [this.state.id]: true }, 1);
       offset--;
       this.setState({ offset });
     }

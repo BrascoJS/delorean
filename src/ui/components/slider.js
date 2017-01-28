@@ -14,13 +14,17 @@ const SliderBar = (props) => {
   if (array.length > 0) position = ((array.length - offset) / array.length);
   else position = 1;
 
-  setTimeout(getData, 10000);
+  function updater(xVal) {
+    getData();
+    sendUpdate(xVal < value1);
+    value1 = xVal;
+  }
 
   return (
     <Slider
       step={stepNum}
       value={position}
-      onChange={(e) => { sendUpdate(e.screenX < value1); value1 = e.screenX; }}
+      onChange={(e) => { updater(e.screenX); }}
     />
   );
 };

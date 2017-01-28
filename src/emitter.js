@@ -11,12 +11,12 @@ export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
-    if (typeof listeners[id] === 'function') console.log('handling: ', listeners[id](message));
+    if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       let pmessage = JSON.parse(JSON.stringify(message));
       pmessage.payload = JSON.parse(pmessage.payload);
       pmessage.payload.type = 'JUMP_TO_STATE';
-      if (item !== null) {
+      if (item) {
         pmessage.type = 'DISPATCH';
         theFunction(pmessage);
       } else listeners[id][0](pmessage);
@@ -35,20 +35,24 @@ function formatAction(action) {
 }
 
 
-// function send(action, state, options, type, instanceId) {
-//   setTimeout(() => {
-//     const message = {
-//       payload: state ? stringify(state) : '',
-//       action: type === 'ACTION' ? stringify(formatAction(action)) : action,
-//       type: type || 'ACTION',
-//       instanceId,
-//       name: options.name
-//     };
-//     history.push(message);
-//     localStorage.setItem('appHistory', history);
-//     handleMessages(message);
-//   }, 0);
-// }
+function send(action, state, options, type, instanceId, listeners, history) {
+  setTimeout(() => {
+    const message = {
+      payload: state ? stringify(state) : '',
+      action: type === 'ACTION' ? stringify(formatAction(action, options)) : action,
+      type: type || 'ACTION',
+      instanceId,
+      name: options.name
+    };
+    // if (message.type === 'ACTION') {
+      history.push(message);
+      localStorage.setItem('appHistory', JSON.stringify(history));
+    // }
+    let key = Object.keys(listeners)[0];
+    theFunction = listeners[key][0];
+    handleMessages(message, listeners);
+  }, 0);
+}
 
 
 export function emitter(options = {}) {
@@ -58,18 +62,7 @@ export function emitter(options = {}) {
   localStorage.setItem('id', id);
   return {
     init: (state, action = {}) => {
-      setTimeout(() => {
-        const message = {
-          payload: state ? stringify(state) : '',
-          action,
-          type: 'INIT',
-          id,
-          name: options.name
-        };
-        //history.push(message);
-        //localStorage.setItem('appHistory', history);
-        handleMessages(message, listeners);
-      }, 0);
+      send(action || {}, state, options, 'INIT', id, listeners, history);
     },
     subscribe: (listener) => {
       if (!listener) return undefined;
@@ -84,31 +77,15 @@ export function emitter(options = {}) {
     unsubscribe: () => {
       delete listeners[id];
     },
-    send: (action, state) => {
-      let type = 'STATE';
+    send: (action, payload) => {
       if (action) {
-        type = 'ACTION';
+        send(action, payload, options, 'ACTION', id, listeners, history);
+      } else {
+        send(undefined, payload, options, 'STATE', id, listeners, history);
       }
-      setTimeout(() => {
-        const message = {
-          payload: state ? stringify(state) : '',
-          action: type === 'ACTION' ? stringify(formatAction(action)) : action,
-          type: type || 'ACTION',
-          id,
-          name: options.name
-        };
-        if (message.type === 'ACTION') {
-          history.push(message);
-          localStorage.setItem('appHistory', JSON.stringify(history));
-        }
-        let key = Object.keys(listeners);
-        let theKey = key[0];
-        theFunction = listeners[theKey][0];
-        handleMessages(message, listeners);
-      }, 0);
     },
     error: (payload) => {
-      console.log(payload);
+      console.log('Error: ', payload.message);
     }
   };
 }
