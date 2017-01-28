@@ -15,9 +15,7 @@ const scheduled = [];
 function configure(name, config = {}) {
   if (typeof config.onlyActions === 'undefined') {
     onlyActions[name] = mobx.isStrictModeEnabled && mobx.isStrictModeEnabled();
-  } else {
-    onlyActions[name] = config.onlyActions;
-  }
+  } else onlyActions[name] = config.onlyActions;
   if (config.filters) filters[name] = config.filters;
   if (config.global) {
     if (fallbackStoreName) throw Error('Global store already defined');
@@ -33,10 +31,9 @@ function init(store, config) {
   const emitTool = emitter(config);
   emitTool.subscribe(dispatchMonitorAction(store, emitTool, onlyActions[name]));
   monitors[name] = emitTool;
-
 }
 
-function schedule(name, action) {
+export function schedule(name, action) {
   let toSend;
   if (action && !isFiltered(action, filters[name])) {
     toSend = () => { monitors[name].send(action, mobx.toJS(stores[name])); };
@@ -58,7 +55,6 @@ export default function spy(store, config) {
   let objName;
 
   mobx.spy((change) => {
-
     if (change.spyReportStart) {
       objName = getName(change.object || change.target);
       if (change.type === 'reaction') {

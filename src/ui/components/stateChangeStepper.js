@@ -7,46 +7,18 @@ import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import Steps from './stateSteps';
-/**
- * A contrived example using a transition between steps
- */
+// import injectTapEventPlugin from 'react-tap-event-plugin';
+// injectTapEventPlugin();
+
 class StateChangeStepper extends Component {
-  constructor(props){
-    super(props)
-
-  this.state = {
-    loading: false,
-    finished: false,
-    steps: []
-  };
-}
-
-  dummyAsync = (cb) => {
-    this.setState({ loading: true }, () => {
-      this.asyncTimer = setTimeout(cb, 10);
-    });
-  };
-
-  handleNext = () => {
-    const { stepIndex } = this.state;
-    if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
-      }));
-    }
-  };
-
-  handlePrev = () => {
-    const { stepIndex } = this.state;
-    if (!this.state.loading) {
-      this.dummyAsync(() => this.setState({
-        loading: false,
-        stepIndex: stepIndex - 1,
-      }));
-    }
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      finished: false,
+      steps: []
+    };
+  }
 
 
 /* May have to change this function from switch statement to something else
@@ -79,6 +51,33 @@ in order to account for varying array lengths */
         return 'You\'re a long way from home sonny jim!';
     }
   }
+
+  dummyAsync = (cb) => {
+    this.setState({ loading: true }, () => {
+      this.asyncTimer = setTimeout(cb, 10);
+    });
+  };
+
+  handleNext = () => {
+    const { stepIndex } = this.state;
+    if (!this.state.loading) {
+      this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex + 1,
+        finished: stepIndex >= 2,
+      }));
+    }
+  };
+
+  handlePrev = () => {
+    const { stepIndex } = this.state;
+    if (!this.state.loading) {
+      this.dummyAsync(() => this.setState({
+        loading: false,
+        stepIndex: stepIndex - 1,
+      }));
+    }
+  };
 
   renderContent() {
     const { finished, stepIndex } = this.state;
@@ -114,7 +113,7 @@ in order to account for varying array lengths */
           />
           <RaisedButton
             label={stepIndex === 2 ? 'Finish' : 'Next'}
-            primary={true}
+            primary
             onTouchTap={this.handleNext}
           />
         </div>
@@ -128,7 +127,6 @@ in order to account for varying array lengths */
     // const stateSteps = this.state.steps.map((step, index) => {
     //   return <Steps key={index} />
     // })
-
 
     return (
       <div style={{ width: '100%', maxWidth: 700, margin: 'auto' }}>
@@ -144,7 +142,7 @@ in order to account for varying array lengths */
           </Step>
 
         </Stepper>
-        <ExpandTransition loading={loading} open={true}>
+        <ExpandTransition loading={loading} open>
           {this.renderContent()}
         </ExpandTransition>
       </div>

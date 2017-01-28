@@ -7,12 +7,16 @@ import {
 
 
 const Steps = (props) => {
-
+  const { stepIndex } = props;
   return (
     <Step>
-      <StepLabel>{props.stepIndex}</StepLabel>
+      <StepLabel>{stepIndex}</StepLabel>
     </Step>
-  )
-}
+  );
+};
+
+Steps.propTypes = {
+  stepIndex: React.PropTypes.number
+};
 
 export default Steps;
