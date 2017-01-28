@@ -10,14 +10,10 @@ let savedFunc;
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
-    console.log('listeners: ', listeners, 'id: ', id);
-    console.log('listeners[id]: ', listeners[id]);
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (item) {
-        message.type = 'DISPATCH';
-        message.dispatch = 'JUMP_TO_STATE';
         savedFunc(message);
       } else {
         listeners[id].forEach(fn => { fn(message); });
@@ -60,7 +56,7 @@ function send(action, state, options, type, instanceId, listeners, history) {
       localStorage.setItem('appHistory', stringify(history));
     }
     let key = Object.keys(listeners)[0];
-    theFunction = listeners[key][0];
+    savedFunc = listeners[key][0];
     handleMessages(message, listeners);
   }, 0);
 }
