@@ -15,8 +15,13 @@ export default class Delorean extends Component {
       id: null,
       offset: 0
     };
+
     this.getData = this.getData.bind(this);
     this.sendUpdate = this.sendUpdate.bind(this);
+  }
+
+  componentDidMount() {
+    this.getData();
   }
 
   getData() {
@@ -30,6 +35,7 @@ export default class Delorean extends Component {
     const message = this.state.history[this.state.history.length - offset - 1];
     message.type = 'DISPATCH';
     message.dispatch = 'JUMP_TO_STATE';
+    console.log('dispatched message: ', message);
     if (pos) {
       handleMessages(message, { [this.state.id]: true }, 1);
       offset++;
