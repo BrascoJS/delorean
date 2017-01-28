@@ -4,22 +4,33 @@ import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
 import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
-let theFunction;
+
+let savedFunc;
 
 export function handleMessages(message, listeners, item = null) {
-  if (!message) return;
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
+    console.log('listeners: ', listeners, 'id: ', id);
+    console.log('listeners[id]: ', listeners[id]);
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
-      let pmessage = JSON.parse(JSON.stringify(message));
-      pmessage.payload = JSON.parse(pmessage.payload);
-      pmessage.payload.type = 'JUMP_TO_STATE';
       if (item) {
-        pmessage.type = 'DISPATCH';
-        theFunction(pmessage);
-      } else listeners[id][0](pmessage);
+        message.type = 'DISPATCH';
+        message.dispatch = 'JUMP_TO_STATE';
+        savedFunc(message);
+      } else {
+        listeners[id].forEach(fn => { fn(message); });
+      }
+      // console.log('HANDLEMESSAGE: ', message);
+      // let pmessage = JSON.parse(JSON.stringify(message));
+      // pmessage.payload = JSON.parse(pmessage.payload);
+      // pmessage.payload.type = 'JUMP_TO_STATE';
+      // listeners[id][0](message);
+      // if (item) {
+      //   pmessage.type = 'DISPATCH';
+      //   theFunction(pmessage);
+      // } else listeners[id][0](pmessage);
     }
   });
 }
@@ -44,10 +55,10 @@ function send(action, state, options, type, instanceId, listeners, history) {
       instanceId,
       name: options.name
     };
-    // if (message.type === 'ACTION') {
+    if (message.type === 'ACTION') {
       history.push(message);
-      localStorage.setItem('appHistory', JSON.stringify(history));
-    // }
+      localStorage.setItem('appHistory', stringify(history));
+    }
     let key = Object.keys(listeners)[0];
     theFunction = listeners[key][0];
     handleMessages(message, listeners);
@@ -84,8 +95,8 @@ export function emitter(options = {}) {
         send(undefined, payload, options, 'STATE', id, listeners, history);
       }
     },
-    error: (payload) => {
-      console.log('Error: ', payload.message);
+    error: (error) => {
+      console.log('Error: ', error);
     }
   };
 }

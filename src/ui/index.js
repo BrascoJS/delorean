@@ -5,7 +5,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import StateChangeStepper from './components/stateChangeStepper';
 import { handleMessages } from './../emitter';
 
-
 export default class Delorean extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +53,3 @@ export default class Delorean extends Component {
     );
   }
 }
-
-
-
