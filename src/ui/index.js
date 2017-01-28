@@ -4,6 +4,7 @@ import SliderExampleStep from './components/slider';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import StateChangeStepper from './components/stateChangeStepper';
 import { handleMessages } from './../emitter';
+import { stringify, parse } from 'jsan';
 
 
 export default class Delorean extends Component {
@@ -19,21 +20,22 @@ export default class Delorean extends Component {
   }
 
   getData() {
-    let a = JSON.parse(localStorage.getItem('appHistory', history));
+    let a = parse(localStorage.getItem('appHistory'));
     let b = localStorage.getItem('id');
     this.setState({ history: a, id: b });
   }
 
   sendUpdate(pos) {
+    let offset = this.state.offset;
+    const message = this.state.history[this.state.history.length - offset - 1];
+    message.type = 'DISPATCH';
+    message.dispatch = 'JUMP_TO_STATE';
     if (pos) {
-      let offset = this.state.offset;
-      handleMessages(this.state.history[this.state.history.length - offset - 1], this.state.id, 1);
+      handleMessages(message, { [this.state.id]: true }, 1);
       offset++;
-      console.log('new offset: ', offset);
       this.setState({ offset });
     } else {
-      let offset = this.state.offset;
-      handleMessages(this.state.history[this.state.history.length - offset - 1], this.state.id, 1);
+      handleMessages(message, { [this.state.id]: true }, 1);
       offset--;
       this.setState({ offset });
     }
@@ -55,6 +57,3 @@ export default class Delorean extends Component {
     );
   }
 }
-
-
-
