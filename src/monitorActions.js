@@ -48,7 +48,7 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
 
   return (message) => {
     if (message.type === 'DISPATCH') {
-      switch (message.payload.type) {
+      switch (message.dispatch) {
         case 'RESET':
           emitTool.init(setValue(store, initValue));
           return;
@@ -60,7 +60,7 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
-          setValue(store, message.payload);
+          setValue(store, parse(message.payload));
           return;
         case 'TOGGLE_ACTION':
           if (!onlyActions) {
