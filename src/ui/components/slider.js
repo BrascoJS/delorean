@@ -1,30 +1,26 @@
 import React from 'react';
 import Slider from 'material-ui/Slider';
-let value1 = Infinity;
+let prevVal = Infinity;
+let stepNum;
 
 const SliderBar = (props) => {
-  const { getData, sendUpdate, history, id, offset = 0 } = props;
-  const array = history;
-  let stepNum = 1;
-  let position;
+  const { getData, sendUpdate, history } = props;
+  let position = 1;
 
-  if (!history) stepNum = 1 / 1;
-  else stepNum = 1 / array.length;
+  if (history.length < 2) stepNum = 0;
+  else stepNum = 1 / (history.length - 1);
 
-  if (array.length > 0) position = ((array.length - offset) / array.length);
-  else position = 1;
-
-  function updater(xVal) {
+  function updater(newPos) {
     getData();
-    sendUpdate(xVal < value1);
-    value1 = xVal;
+    const index = Math.round(newPos / stepNum);
+    sendUpdate(index);
   }
 
   return (
     <Slider
       step={stepNum}
       value={position}
-      onChange={(e) => { updater(e.screenX); }}
+      onChange={(e, newPos) => { updater(newPos); }}
     />
   );
 };
