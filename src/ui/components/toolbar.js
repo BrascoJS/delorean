@@ -13,7 +13,7 @@ const styles = {
 };
 
 const Toolbar = (props) => {
-  const { getData, sendUpdate, history, id } = props;
+  const { getData, sendUpdate, history } = props;
   return (
     <Tabs>
       <Tab label="Time Travel" >
@@ -22,7 +22,6 @@ const Toolbar = (props) => {
             getData={getData}
             sendUpdate={sendUpdate}
             history={history}
-            id={id}
           />
         </div>
       </Tab>
@@ -50,9 +49,7 @@ const Toolbar = (props) => {
 Toolbar.propTypes = {
   getData: React.PropTypes.func,
   sendUpdate: React.PropTypes.func,
-  history: React.PropTypes.array,
-  id: React.PropTypes.string,
-  offset: React.PropTypes.number
+  history: React.PropTypes.array
 };
 
 export default Toolbar;
