@@ -13,20 +13,8 @@ export function handleMessages(message, listeners, item = null) {
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
-      if (item) {
-        savedFunc(message);
-      } else {
-        listeners[id].forEach(fn => { fn(message); });
-      }
-      // console.log('HANDLEMESSAGE: ', message);
-      // let pmessage = JSON.parse(JSON.stringify(message));
-      // pmessage.payload = JSON.parse(pmessage.payload);
-      // pmessage.payload.type = 'JUMP_TO_STATE';
-      // listeners[id][0](message);
-      // if (item) {
-      //   pmessage.type = 'DISPATCH';
-      //   theFunction(pmessage);
-      // } else listeners[id][0](pmessage);
+      if (item) savedFunc(message);
+      else listeners[id].forEach(fn => { fn(message); });
     }
   });
 }
@@ -61,12 +49,10 @@ function send(action, state, options, type, instanceId, listeners, history) {
   }, 0);
 }
 
-
 export function emitter(options = {}) {
   const listeners = {};
   const history = [];
   const id = Math.random().toString(36).substr(2);
-  localStorage.setItem('id', id);
   return {
     init: (state, action = {}) => {
       send(action || {}, state, options, 'INIT', id, listeners, history);
