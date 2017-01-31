@@ -12,8 +12,7 @@ export default class Delorean extends Component {
     super(props);
     this.state = {
       history: [],
-      id: null,
-      offset: 0
+      id: null
     };
 
     this.getData = this.getData.bind(this);
@@ -30,21 +29,11 @@ export default class Delorean extends Component {
     this.setState({ history: a, id: b });
   }
 
-  sendUpdate(pos) {
-    let offset = this.state.offset;
-    const message = this.state.history[this.state.history.length - offset - 1];
+  sendUpdate(index) {
+    const message = this.state.history[index];
     message.type = 'DISPATCH';
     message.dispatch = 'JUMP_TO_STATE';
-    console.log('dispatched message: ', message);
-    if (pos) {
-      handleMessages(message, { [this.state.id]: true }, 1);
-      offset++;
-      this.setState({ offset });
-    } else {
-      handleMessages(message, { [this.state.id]: true }, 1);
-      offset--;
-      this.setState({ offset });
-    }
+    handleMessages(message, { [this.state.id]: true }, 1);
   }
 
   render() {
