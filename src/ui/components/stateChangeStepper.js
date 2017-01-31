@@ -7,8 +7,6 @@ import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import TextField from 'material-ui/TextField';
 import Steps from './stateSteps';
-// import injectTapEventPlugin from 'react-tap-event-plugin';
-// injectTapEventPlugin();
 
 class StateChangeStepper extends Component {
   constructor(props) {
@@ -16,10 +14,10 @@ class StateChangeStepper extends Component {
     this.state = {
       loading: false,
       finished: false,
-      steps: []
+      steps: [],
+      stepIndex: 0
     };
   }
-
 
 /* May have to change this function from switch statement to something else
 in order to account for varying array lengths */
@@ -81,6 +79,7 @@ in order to account for varying array lengths */
 
   renderContent() {
     const { finished, stepIndex } = this.state;
+    const { sendUpdate } = this.props;
     const contentStyle = { margin: '0 16px', overflow: 'hidden' };
 
     if (finished) {
@@ -91,6 +90,7 @@ in order to account for varying array lengths */
               href="#"
               onClick={(event) => {
                 event.preventDefault();
+                sendUpdate(0, 'RESET');
                 this.setState({ stepIndex: 0, finished: false });
               }}
             >
@@ -108,13 +108,13 @@ in order to account for varying array lengths */
           <FlatButton
             label="Back"
             disabled={stepIndex === 0}
-            onTouchTap={this.handlePrev}
+            onClick={this.handlePrev}
             style={{ marginRight: 12 }}
           />
           <RaisedButton
             label={stepIndex === 2 ? 'Finish' : 'Next'}
             primary
-            onTouchTap={this.handleNext}
+            onClick={this.handleNext}
           />
         </div>
       </div>
@@ -149,5 +149,9 @@ in order to account for varying array lengths */
     );
   }
 }
+
+StateChangeStepper.propTypes = {
+  sendUpdate: React.PropTypes.func
+};
 
 export default StateChangeStepper;

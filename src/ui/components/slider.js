@@ -13,7 +13,7 @@ const SliderBar = (props) => {
   function updater(newPos) {
     getData();
     const index = Math.round(newPos / stepNum);
-    sendUpdate(index);
+    sendUpdate(index, 'JUMP_TO_STATE');
   }
 
   return (
@@ -28,9 +28,7 @@ const SliderBar = (props) => {
 SliderBar.propTypes = {
   getData: React.PropTypes.func,
   sendUpdate: React.PropTypes.func,
-  history: React.PropTypes.array,
-  id: React.PropTypes.string,
-  offset: React.PropTypes.number
+  history: React.PropTypes.array
 };
 
 export default SliderBar;
