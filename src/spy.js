@@ -88,5 +88,6 @@ export default function spy(store, config) {
     } else if (change.spyReportEnd) {
       send();
     }
+    console.log({ stores, onlyActions, filters, monitors, scheduled });
   });
 }

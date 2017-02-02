@@ -15,8 +15,11 @@ export function handleMessages(message, listeners, item = null) {
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (item) {
+        console.log('listeners: ', listeners);
         let key = Object.keys(listeners)[0];
         let thisFunc = savedFuncs[key];
+        console.log('savedFuncs: ', savedFuncs);
+        // console.log('thisFunc: ', thisFunc);
         thisFunc(message);
       } else {
         listeners[id].forEach(fn => { fn(message); });
@@ -47,10 +50,10 @@ function send(action, state, options, type, instanceId, listeners) {
       name: options.name,
       location: window.location.hash
     };
-    if (message.type === 'ACTION') {
-      history.push(message);
-      localStorage.setItem('appHistory', stringify(history));
-    }
+    // if (message.type === 'ACTION') {
+    history.push(message);
+    localStorage.setItem('appHistory', stringify(history));
+    // }
     let key = Object.keys(listeners)[0];
     savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);

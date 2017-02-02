@@ -6,12 +6,12 @@ import StateChangeStepper from './components/stateChangeStepper';
 import { handleMessages } from './../emitter';
 import { stringify, parse } from 'jsan';
 
-
 export default class Delorean extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: []
+      history: [],
+      currentIndex: null
     };
 
     this.getData = this.getData.bind(this);
@@ -28,10 +28,12 @@ export default class Delorean extends Component {
   }
 
   sendUpdate(index, action) {
+    this.getData();
+    this.setState({ currentIndex: index });
     const message = this.state.history[index];
     message.type = 'DISPATCH';
     message.dispatch = action;
-    handleMessages(message, { [message.instanceId]: true }, 1);
+    handleMessages(message, { [message.instanceId]: true }, true);
   }
 
   render() {
@@ -42,6 +44,7 @@ export default class Delorean extends Component {
             getData={this.getData}
             sendUpdate={this.sendUpdate}
             history={this.state.history}
+            curIndex={this.state.currentIndex}
           />
         </div>
       </MuiThemeProvider>

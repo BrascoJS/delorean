@@ -13,6 +13,7 @@ const SliderBar = (props) => {
   function updater(newPos) {
     getData();
     const index = Math.round(newPos / stepNum);
+    console.log('history object: ', history[index]);
     sendUpdate(index, 'JUMP_TO_STATE');
   }
 
