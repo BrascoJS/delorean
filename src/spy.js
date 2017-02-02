@@ -68,6 +68,7 @@ export default function spy(store, config) {
       objName = getName(change.object || change.target);
 
       if (change.type === 'reaction') {
+        schedule(objName);
         return;
      }
       if (!stores[objName]) objName = fallbackStoreName;
