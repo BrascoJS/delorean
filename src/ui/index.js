@@ -11,9 +11,7 @@ export default class Delorean extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
       history: []
-
     };
 
     this.getData = this.getData.bind(this);
@@ -25,7 +23,6 @@ export default class Delorean extends Component {
   }
 
   getData() {
-
     let history = parse(localStorage.getItem('appHistory'));
     this.setState({ history });
   }
@@ -35,7 +32,6 @@ export default class Delorean extends Component {
     message.type = 'DISPATCH';
     message.dispatch = action;
     handleMessages(message, { [message.instanceId]: true }, 1);
-
   }
 
   render() {
