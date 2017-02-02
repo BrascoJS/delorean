@@ -11,12 +11,12 @@ const history = [];
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
-    //if (message.instanceId && id !== message.instanceId) return;
+    // if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (item) {
-        let key = Object.keys(listeners)[0]
-        let thisFunc =savedFuncs[key];
+        let key = Object.keys(listeners)[0];
+        let thisFunc = savedFuncs[key];
         thisFunc(message);
       } else {
         listeners[id].forEach(fn => { fn(message); });
@@ -58,7 +58,6 @@ function send(action, state, options, type, instanceId, listeners) {
 }
 
 export function emitter(options = {}) {
-  
   const listeners = {};
   const id = Math.random().toString(36).substr(2);
   return {
@@ -79,9 +78,7 @@ export function emitter(options = {}) {
       delete listeners[id];
     },
     send: (action, payload) => {
-
       if (action) {
-       
         send(action, payload, options, 'ACTION', id, listeners);
       } else {
         send(undefined, payload, options, 'STATE', id, listeners);
