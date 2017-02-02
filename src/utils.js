@@ -45,7 +45,6 @@ function setValueAction(store, state) {
     else {
       
       Object.keys(state).forEach((key) => {
-        if(store[key] !== state[key])
         store[key] = state[key];
       });
       
@@ -91,8 +90,6 @@ export function evalArgs(inArgs, restArgs) {
 }
 
 export function evalMethod(action, obj) {
-  action = JSON.stringify(action)
-
   if (typeof action === 'string') {
     return (new Function('return ' + action)).call(obj);
   }
