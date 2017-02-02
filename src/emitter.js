@@ -4,22 +4,36 @@ import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
 import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
-let theFunction;
+
+let savedFunc= {};
+const history = [];
 
 export function handleMessages(message, listeners, item = null) {
-  if (!message) return;
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     //if (message.instanceId && id !== message.instanceId) return;
-    if (typeof listeners[id] === 'function') listeners[id](message);
+    if (typeof listeners[id] === 'function'){
+     listeners[id](message);
+   }
     else {
-      let pmessage = JSON.parse(JSON.stringify(message));
-      pmessage.payload = JSON.parse(pmessage.payload);
-      pmessage.payload.type = 'JUMP_TO_STATE';
       if (item) {
-        pmessage.type = 'DISPATCH';
-        theFunction(pmessage);
-      } else listeners[id][0](pmessage);
+      let key = Object.keys(listeners)[0]
+      let someFunc =savedFunc[key];
+     
+    
+      someFunc(message);
+      } else {
+        listeners[id].forEach(fn => { fn(message); });
+      }
+      // console.log('HANDLEMESSAGE: ', message);
+      // let pmessage = JSON.parse(JSON.stringify(message));
+      // pmessage.payload = JSON.parse(pmessage.payload);
+      // pmessage.payload.type = 'JUMP_TO_STATE';
+      // listeners[id][0](message);
+      // if (item) {
+      //   pmessage.type = 'DISPATCH';
+      //   theFunction(pmessage);
+      // } else listeners[id][0](pmessage);
     }
   });
 }
@@ -35,35 +49,42 @@ function formatAction(action) {
 }
 
 
-function send(action, state, options, type, instanceId, listeners, history) {
+function send(action, state, options, type, instanceId, listeners) {
   setTimeout(() => {
+
     const message = {
       payload: state ? stringify(state) : '',
       action: type === 'ACTION' ? stringify(formatAction(action, options)) : action,
       type: type || 'ACTION',
       instanceId,
-      name: options.name
+      name: options.name,
+      location: window.location.hash
     };
-    // if (message.type === 'ACTION') {
+    
+    if (message.type === 'ACTION') {
+      
       history.push(message);
-      console.log(history)
-      localStorage.setItem('appHistory', JSON.stringify(history));
-    // }
+      localStorage.setItem('appHistory', stringify(history));
+       
+    }
+
+
     let key = Object.keys(listeners)[0];
-    theFunction = listeners[key][0];
+    savedFunc[key] = listeners[key][0];
+
     handleMessages(message, listeners);
   }, 0);
 }
 
 
 export function emitter(options = {}) {
+  
   const listeners = {};
-  const history = [];
   const id = Math.random().toString(36).substr(2);
   localStorage.setItem('id', id);
   return {
     init: (state, action = {}) => {
-      send(action || {}, state, options, 'INIT', id, listeners, history);
+      send(action || {}, state, options, 'INIT', id, listeners);
     },
     subscribe: (listener) => {
       if (!listener) return undefined;
@@ -79,14 +100,16 @@ export function emitter(options = {}) {
       delete listeners[id];
     },
     send: (action, payload) => {
+
       if (action) {
-        send(action, payload, options, 'ACTION', id, listeners, history);
+       
+        send(action, payload, options, 'ACTION', id, listeners);
       } else {
-        send(undefined, payload, options, 'STATE', id, listeners, history);
+        send(undefined, payload, options, 'STATE', id, listeners);
       }
     },
-    error: (payload) => {
-      console.log('Error: ', payload.message);
+    error: (error) => {
+      console.log('Error: ', error);
     }
   };
 }

@@ -38,14 +38,20 @@ export const silently = (fn, store) => {
 };
 
 function setValueAction(store, state) {
+
   silently(() => {
+
     if (store.importState) store.importState(state);
     else {
+      
       Object.keys(state).forEach((key) => {
+        if(store[key] !== state[key])
         store[key] = state[key];
       });
+      
     }
   }, store);
+  console.log(state)
   return state;
 }
 setValueAction.__isRemotedevAction = true;
