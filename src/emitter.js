@@ -5,39 +5,22 @@ import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
 
-
-let savedFunc= {};
+let savedFuncs = {};
 const history = [];
-
 
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     //if (message.instanceId && id !== message.instanceId) return;
-    if (typeof listeners[id] === 'function'){
-     listeners[id](message);
-   }
+    if (typeof listeners[id] === 'function') listeners[id](message);
     else {
-
       if (item) {
-      let key = Object.keys(listeners)[0]
-      let someFunc =savedFunc[key];
-     
-    
-      someFunc(message);
+        let key = Object.keys(listeners)[0]
+        let thisFunc =savedFuncs[key];
+        thisFunc(message);
       } else {
         listeners[id].forEach(fn => { fn(message); });
       }
-      // console.log('HANDLEMESSAGE: ', message);
-      // let pmessage = JSON.parse(JSON.stringify(message));
-      // pmessage.payload = JSON.parse(pmessage.payload);
-      // pmessage.payload.type = 'JUMP_TO_STATE';
-      // listeners[id][0](message);
-      // if (item) {
-      //   pmessage.type = 'DISPATCH';
-      //   theFunction(pmessage);
-      // } else listeners[id][0](pmessage);
-
     }
   });
 }
@@ -64,20 +47,12 @@ function send(action, state, options, type, instanceId, listeners) {
       name: options.name,
       location: window.location.hash
     };
-
-    
     if (message.type === 'ACTION') {
-      
       history.push(message);
       localStorage.setItem('appHistory', stringify(history));
-       
     }
-
-
     let key = Object.keys(listeners)[0];
-    savedFunc[key] = listeners[key][0];
-
-
+    savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);
   }, 0);
 }
