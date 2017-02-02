@@ -3,8 +3,6 @@ import spy from './spy';
 import getDecorator from './getDecorator';
 
 function dev(store, config) {
-  console.log('config: ', config.name);
-  console.log('store ', store)
   if ((!config || !config.remote) && (typeof window === 'undefined')) return store;
 
   if (mobx.isObservable(store)) spy(store, config);
