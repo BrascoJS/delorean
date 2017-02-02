@@ -5,16 +5,22 @@ import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
 
-let savedFunc;
+let savedFuncs = {};
+const history = [];
 
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
-    if (message.instanceId && id !== message.instanceId) return;
+    //if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
-      if (item) savedFunc(message);
-      else listeners[id].forEach(fn => { fn(message); });
+      if (item) {
+        let key = Object.keys(listeners)[0]
+        let thisFunc =savedFuncs[key];
+        thisFunc(message);
+      } else {
+        listeners[id].forEach(fn => { fn(message); });
+      }
     }
   });
 }
@@ -30,32 +36,34 @@ function formatAction(action) {
 }
 
 
-function send(action, state, options, type, instanceId, listeners, history) {
+function send(action, state, options, type, instanceId, listeners) {
   setTimeout(() => {
+
     const message = {
       payload: state ? stringify(state) : '',
       action: type === 'ACTION' ? stringify(formatAction(action, options)) : action,
       type: type || 'ACTION',
       instanceId,
-      name: options.name
+      name: options.name,
+      location: window.location.hash
     };
     if (message.type === 'ACTION') {
       history.push(message);
       localStorage.setItem('appHistory', stringify(history));
     }
     let key = Object.keys(listeners)[0];
-    savedFunc = listeners[key][0];
+    savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);
   }, 0);
 }
 
 export function emitter(options = {}) {
+  
   const listeners = {};
-  const history = [];
   const id = Math.random().toString(36).substr(2);
   return {
     init: (state, action = {}) => {
-      send(action || {}, state, options, 'INIT', id, listeners, history);
+      send(action || {}, state, options, 'INIT', id, listeners);
     },
     subscribe: (listener) => {
       if (!listener) return undefined;
@@ -71,10 +79,12 @@ export function emitter(options = {}) {
       delete listeners[id];
     },
     send: (action, payload) => {
+
       if (action) {
-        send(action, payload, options, 'ACTION', id, listeners, history);
+       
+        send(action, payload, options, 'ACTION', id, listeners);
       } else {
-        send(undefined, payload, options, 'STATE', id, listeners, history);
+        send(undefined, payload, options, 'STATE', id, listeners);
       }
     },
     error: (error) => {

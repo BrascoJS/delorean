@@ -38,14 +38,19 @@ export const silently = (fn, store) => {
 };
 
 function setValueAction(store, state) {
+
   silently(() => {
+
     if (store.importState) store.importState(state);
     else {
+      
       Object.keys(state).forEach((key) => {
         store[key] = state[key];
       });
+      
     }
   }, store);
+  console.log(state)
   return state;
 }
 setValueAction.__isRemotedevAction = true;
@@ -76,6 +81,7 @@ export function getMethods(obj) {
 export const interpretArg = (arg) => (new Function('return ' + arg))();
 
 export function evalArgs(inArgs, restArgs) {
+
   const args = inArgs.map(interpretArg);
   if (!restArgs) return args;
   const rest = interpretArg(restArgs);

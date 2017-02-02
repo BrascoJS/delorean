@@ -47,6 +47,7 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
   emitTool.init(initValue, getMethods(store));
 
   return (message) => {
+  
     if (message.type === 'DISPATCH') {
       switch (message.dispatch) {
         case 'RESET':
@@ -60,7 +61,12 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
-          setValue(store, parse(message.payload));
+
+         //console.log(parse(message.payload))
+         
+          setValue(theStore, parse(message.payload));
+        
+
           return;
         case 'TOGGLE_ACTION':
           if (!onlyActions) {
@@ -77,6 +83,9 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           return;
         }
       }
-    } else if (message.type === 'ACTION') dispatchRemotely(emitTool, store, message.payload);
+    } else if (message.type === 'ACTION') {
+      
+      dispatchRemotely(emitTool, store, message.payload);
+    }
   };
 }
