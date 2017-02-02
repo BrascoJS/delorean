@@ -5,8 +5,10 @@ import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
 
+
 let savedFunc= {};
 const history = [];
+
 
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
@@ -16,6 +18,7 @@ export function handleMessages(message, listeners, item = null) {
      listeners[id](message);
    }
     else {
+
       if (item) {
       let key = Object.keys(listeners)[0]
       let someFunc =savedFunc[key];
@@ -34,6 +37,7 @@ export function handleMessages(message, listeners, item = null) {
       //   pmessage.type = 'DISPATCH';
       //   theFunction(pmessage);
       // } else listeners[id][0](pmessage);
+
     }
   });
 }
@@ -60,6 +64,7 @@ function send(action, state, options, type, instanceId, listeners) {
       name: options.name,
       location: window.location.hash
     };
+
     
     if (message.type === 'ACTION') {
       
@@ -72,16 +77,15 @@ function send(action, state, options, type, instanceId, listeners) {
     let key = Object.keys(listeners)[0];
     savedFunc[key] = listeners[key][0];
 
+
     handleMessages(message, listeners);
   }, 0);
 }
-
 
 export function emitter(options = {}) {
   
   const listeners = {};
   const id = Math.random().toString(36).substr(2);
-  localStorage.setItem('id', id);
   return {
     init: (state, action = {}) => {
       send(action || {}, state, options, 'INIT', id, listeners);

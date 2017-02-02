@@ -13,7 +13,7 @@ const styles = {
 };
 
 const Toolbar = (props) => {
-  const { getData, sendUpdate, history, id, offset } = props;
+  const { getData, sendUpdate, history } = props;
   return (
     <Tabs>
       <Tab label="Time Travel" >
@@ -22,14 +22,16 @@ const Toolbar = (props) => {
             getData={getData}
             sendUpdate={sendUpdate}
             history={history}
-            id={id}
-            offset={offset}
           />
         </div>
       </Tab>
       <Tab label="Undo/Redo" >
         <div>
-          <StateChangeStepper />
+          <StateChangeStepper
+            getData={getData}
+            sendUpdate={sendUpdate}
+            history={history}
+          />
         </div>
       </Tab>
       <Tab label="Dependency Tree">
@@ -47,9 +49,7 @@ const Toolbar = (props) => {
 Toolbar.propTypes = {
   getData: React.PropTypes.func,
   sendUpdate: React.PropTypes.func,
-  history: React.PropTypes.array,
-  id: React.PropTypes.string,
-  offset: React.PropTypes.number
+  history: React.PropTypes.array
 };
 
 export default Toolbar;

@@ -61,10 +61,12 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
           return;
         case 'JUMP_TO_STATE':
         case 'JUMP_TO_ACTION':
+
          //console.log(parse(message.payload))
          
           setValue(theStore, parse(message.payload));
         
+
           return;
         case 'TOGGLE_ACTION':
           if (!onlyActions) {
