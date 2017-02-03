@@ -1,6 +1,5 @@
 import mobx from 'mobx';
-import { createAction, getName } from './utils';
-import { isFiltered } from './filters';
+import { createAction, getName, isFiltered } from './utils';
 import { dispatchMonitorAction } from './monitorActions';
 import { emitter } from './emitter';
 
@@ -14,7 +13,6 @@ const scheduled = [];
 
 function configure(name, config = {}) {
   if (typeof config.onlyActions === 'undefined') {
-
     onlyActions[name] = mobx.isStrictModeEnabled && mobx.isStrictModeEnabled();
   } else onlyActions[name] = config.onlyActions;
   if (config.filters) filters[name] = config.filters;
@@ -44,7 +42,6 @@ export function schedule(name, action) {
 
 function send() {
   if (scheduled.length) {
-
     const toSend = scheduled.pop();
     if (toSend) toSend();
   }
@@ -88,6 +85,5 @@ export default function spy(store, config) {
     } else if (change.spyReportEnd) {
       send();
     }
-    console.log({ stores, onlyActions, filters, monitors, scheduled });
   });
 }
