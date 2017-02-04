@@ -11,7 +11,8 @@ export default class Delorean extends Component {
     super(props);
     this.state = {
       history: [],
-      currentIndex: null
+      currentIndex: null,
+      currentAction: null
     };
 
     this.getData = this.getData.bind(this);
@@ -28,13 +29,24 @@ export default class Delorean extends Component {
     this.setState({ history });
   }
 
+  // actionReducer(object) {
+  //   Object.keys(object).reduce((acc, cur) => {
+  //     if (object[cur] !== null && object[cur] != false) acc[cur] = object[cur];
+  //     if (Array.isArray(object[cur]) && object[cur].length) {
+  //       if (typeof object[cur][0] !== 'string') acc[cur] = object[cur][0].title;
+  //       else acc[cur] = object[cur][0];
+  //     }
+  //     return acc;
+  //   }, {});
+  // }
+
   getCurAction() {
     const curStateObject = this.state.history[this.state.currentIndex] || '';
     let curAction = curStateObject;
     if (curStateObject !== '') curAction = curStateObject.action;
-    if (Array.isArray(curAction)) curAction = curStateObject.payload;
+    if (Array.isArray(curAction)) curAction = false;
     if (curAction) curAction = parse(curAction).action.type;
-    const res = Object.keys(curAction).reduce((acc, cur) => {
+    const currentAction = Object.keys(curAction).reduce((acc, cur) => {
       // console.log('reducing: ', curAction[cur]);
       if (curAction[cur] !== null && curAction[cur] != false) acc[cur] = curAction[cur];
       if (Array.isArray(curAction[cur]) && curAction[cur].length) {
@@ -43,7 +55,7 @@ export default class Delorean extends Component {
       }
       return acc;
     }, {});
-    return res;
+    this.setState({ currentAction });
   }
 
   sendUpdate(index, action) {
@@ -65,6 +77,7 @@ export default class Delorean extends Component {
             history={this.state.history}
             curIndex={this.state.currentIndex}
             curAction={this.getCurAction}
+            action={this.state.currentAction}
           />
         </div>
       </MuiThemeProvider>

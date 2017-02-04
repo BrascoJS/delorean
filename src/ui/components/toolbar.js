@@ -14,13 +14,23 @@ const styles = {
 };
 
 const Toolbar = (props) => {
-  const { getData, sendUpdate, history, curIndex, curAction } = props;
-  const actions = curAction();
+  const { getData, sendUpdate, history, curIndex, curAction, action } = props;
+  let type;
+  let other = [];
+  if (action) {
+    type = action.type;
+    Object.keys(action).forEach((key, i) => {
+      if (key !== 'type') {
+        other.push(<div key={i}> {key}: {action[key]} </div>);
+      }
+    });
+  }
 
   return (
     <Tabs>
       <Tab label="Time Travel" >
         <div>
+          Action: {type} {other}
           <SliderBar
             getData={getData}
             sendUpdate={sendUpdate}
@@ -56,7 +66,8 @@ Toolbar.propTypes = {
   sendUpdate: React.PropTypes.func,
   curAction: React.PropTypes.func,
   history: React.PropTypes.array,
-  curIndex: React.PropTypes.number
+  curIndex: React.PropTypes.number,
+  action: React.PropTypes.object
 };
 
 export default Toolbar;

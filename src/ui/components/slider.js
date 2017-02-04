@@ -7,6 +7,8 @@ const SliderBar = (props) => {
   let prevVal = Infinity;
   let stepNum;
   let actions;
+  let type;
+  let other;
 
   if (history.length < 2) stepNum = 0;
   else stepNum = 1 / (history.length - 1);
@@ -15,20 +17,15 @@ const SliderBar = (props) => {
     getData();
     const index = Math.round(newPos / stepNum);
     sendUpdate(index, 'JUMP_TO_STATE');
-    actions = curAction();
-    actions = JSON.stringify(actions);
-    console.log(actions);
+    curAction();
   }
 
   return (
-    <div>
-      <p> {actions} </p>
-      <Slider
-        step={stepNum}
-        value={position}
-        onChange={(e, newPos) => { updater(newPos); }}
-      />
-    </div>
+    <Slider
+      step={stepNum}
+      value={position}
+      onChange={(e, newPos) => { updater(newPos); }}
+    />
   );
 };
 
