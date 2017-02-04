@@ -6,7 +6,7 @@ import getDecorator from './getDecorator.js';
 import dev from './dev.js';
 
 let savedFuncs = {};
-const history = [];
+export const history = [];
 
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
@@ -47,10 +47,7 @@ function send(action, state, options, type, instanceId, listeners) {
       name: options.name,
       location: window.location.hash
     };
-    // if (message.type === 'ACTION') {
-    history.push(message);
-    localStorage.setItem('appHistory', stringify(history));
-    // }
+    if (message.type === 'ACTION') history.push(stringify(message));
     let key = Object.keys(listeners)[0];
     savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);
