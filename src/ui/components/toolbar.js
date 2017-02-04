@@ -3,6 +3,7 @@ import { Tabs, Tab } from 'material-ui/Tabs';
 import Slider from 'material-ui/Slider';
 import StateChangeStepper from './stateChangeStepper';
 import SliderBar from './slider';
+
 const styles = {
   headline: {
     fontSize: 24,
@@ -10,17 +11,23 @@ const styles = {
     marginBottom: 12,
     fontWeight: 400,
   },
+  text: {
+    marginLeft: 5
+  }
 };
 
 const Toolbar = (props) => {
-  const { getData, sendUpdate, history } = props;
+  const { getData, sendUpdate, history, curIndex, getCurAction, curAction } = props;
+
   return (
     <Tabs>
       <Tab label="Time Travel" >
-        <div>
+        <div >
+          <div style={styles.text}> {curAction} </div>
           <SliderBar
             getData={getData}
             sendUpdate={sendUpdate}
+            getCurAction={getCurAction}
             history={history}
           />
         </div>
@@ -31,6 +38,9 @@ const Toolbar = (props) => {
             getData={getData}
             sendUpdate={sendUpdate}
             history={history}
+            curIndex={curIndex}
+            curAction={curAction}
+            getCurAction={getCurAction}
           />
         </div>
       </Tab>
@@ -49,7 +59,10 @@ const Toolbar = (props) => {
 Toolbar.propTypes = {
   getData: React.PropTypes.func,
   sendUpdate: React.PropTypes.func,
-  history: React.PropTypes.array
+  getCurAction: React.PropTypes.func,
+  history: React.PropTypes.array,
+  curIndex: React.PropTypes.number,
+  curAction: React.PropTypes.string
 };
 
 export default Toolbar;

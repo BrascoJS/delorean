@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Step,
-Stepper,
-StepLabel } from 'material-ui/Stepper';
+import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
-import TextField from 'material-ui/TextField';
 import Steps from './stateSteps';
+import { parse } from 'jsan';
 
 class StateChangeStepper extends Component {
   constructor(props) {
@@ -22,31 +20,29 @@ class StateChangeStepper extends Component {
 /* May have to change this function from switch statement to something else
 in order to account for varying array lengths */
   getStepContent(stepIndex) {
+    const { history, curIndex, curAction } = this.props;
+
     switch (stepIndex) {
       case 0:
         return (
-          <p>
-            This is a state change!
-          </p>
+          <div>
+            {curAction}
+          </div>
         );
       case 1:
         return (
           <div>
-
-            <p>
-              This is another state change!
-            </p>
-            <p>Something something whatever cool</p>
+            {curAction}
           </div>
         );
       case 2:
         return (
-          <p>
-            This is ANOTHER state change!!!
-          </p>
+          <div>
+            {curAction}
+          </div>
         );
       default:
-        return 'You\'re a long way from home sonny jim!';
+        return 'Click the buttons to undo/redo consecutive actions';
     }
   }
 
@@ -58,22 +54,34 @@ in order to account for varying array lengths */
 
   handleNext = () => {
     const { stepIndex } = this.state;
+    const { sendUpdate, curIndex, history, getData, getCurAction } = this.props;
+    let newIndex = curIndex + 1;
+    getData();
+    if (newIndex > history.length - 1) newIndex = history.length - 1;
     if (!this.state.loading) {
       this.dummyAsync(() => this.setState({
         loading: false,
         stepIndex: stepIndex + 1,
         finished: stepIndex >= 2,
       }));
+      sendUpdate(newIndex, 'JUMP_TO_STATE');
+      getCurAction();
     }
   };
 
   handlePrev = () => {
     const { stepIndex } = this.state;
+    const { sendUpdate, curIndex, getData, getCurAction } = this.props;
+    let newIndex = curIndex - 1;
+    getData();
+    if (newIndex < 0) newIndex = 0;
     if (!this.state.loading) {
       this.dummyAsync(() => this.setState({
         loading: false,
-        stepIndex: stepIndex - 1,
+        stepIndex: stepIndex - 1
       }));
+      sendUpdate(newIndex, 'JUMP_TO_STATE');
+      getCurAction();
     }
   };
 
@@ -106,13 +114,13 @@ in order to account for varying array lengths */
         <div>{this.getStepContent(stepIndex)}</div>
         <div style={{ marginTop: 24, marginBottom: 12 }}>
           <FlatButton
-            label="Back"
+            label="Undo"
             disabled={stepIndex === 0}
             onClick={this.handlePrev}
             style={{ marginRight: 12 }}
           />
           <RaisedButton
-            label={stepIndex === 2 ? 'Finish' : 'Next'}
+            label={stepIndex === 2 ? 'Finish' : 'Redo'}
             primary
             onClick={this.handleNext}
           />
@@ -151,7 +159,12 @@ in order to account for varying array lengths */
 }
 
 StateChangeStepper.propTypes = {
-  sendUpdate: React.PropTypes.func
+  sendUpdate: React.PropTypes.func,
+  getData: React.PropTypes.func,
+  getCurAction: React.PropTypes.func,
+  curIndex: React.PropTypes.number,
+  history: React.PropTypes.array,
+  curAction: React.PropTypes.string
 };
 
 export default StateChangeStepper;

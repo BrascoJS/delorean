@@ -17,7 +17,9 @@ export function createAction(name, change) {
   let action;
   if (typeof change.newValue !== 'undefined') {
     action = { [change.name]: mobx.toJS(change.newValue) };
-  } else action = getPayload(change);
+  } else {
+    action = getPayload(change);
+  }
   action.type = `${name}`;
   return action;
 }
@@ -57,7 +59,7 @@ export function getMethods(obj) {
   if (typeof obj !== 'object') return undefined;
   let functions;
   let m;
-  if (obj.__proto__) m = obj.__proto__.__proto__;
+  if (Object.getPrototypeOf(obj)) m = Object.getPrototypeOf(Object.getPrototypeOf(obj));
   if (!m) m = obj;
 
   Object.getOwnPropertyNames(m).forEach(key => {
@@ -74,7 +76,7 @@ export function getMethods(obj) {
 }
 
 /* eslint-disable no-new-func */
-export const interpretArg = (arg) => (new Function('return ' + arg))();
+export const interpretArg = (arg) => (new Function(`return ${arg}`))();
 
 export function evalArgs(inArgs, restArgs) {
 
@@ -87,10 +89,20 @@ export function evalArgs(inArgs, restArgs) {
 
 export function evalMethod(action, obj) {
   if (typeof action === 'string') {
-    return (new Function('return ' + action)).call(obj);
+    return (new Function(`return ${action}`)).call(obj);
   }
 
   const args = evalArgs(action.args, action.rest);
   return (new Function('args', `return this.${action.name}(args)`)).apply(obj, args);
 }
 /* eslint-enable */
+
+export function isFiltered(action, localFilter) {
+  if (typeof window === 'undefined' && !localFilter) return true;
+  if (!localFilter) return false;
+  const { whitelist, blacklist } = localFilter;
+  return (
+    whitelist && !action.type.match(whitelist) ||
+    blacklist && action.type.match(blacklist)
+  );
+}
