@@ -4,7 +4,6 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import Steps from './stateSteps';
-import { parse } from 'jsan';
 
 class StateChangeStepper extends Component {
   constructor(props) {

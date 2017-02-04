@@ -12,7 +12,8 @@ const styles = {
     fontWeight: 400,
   },
   text: {
-    marginLeft: 5
+    marginLeft: 5,
+    paddingTop: 10
   }
 };
 
