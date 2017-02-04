@@ -1,6 +1,6 @@
 import getDecorator from './getDecorator';
 import dlorean from './dev';
-import Dlorean from './ui/index';
+import Delorean from './ui/index';
 
 if (process.env.NODE_ENV === 'development') {
   // module.exports = require('./dev').default; // eslint-disable-line global-require
@@ -9,4 +9,4 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export const delorean = dlorean;
-export const Delorean = Dlorean;
+export const DeloreanTools = Delorean;
