@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  Step,
-  Stepper,
-  StepLabel,
-} from 'material-ui/Stepper';
-
+import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 
 const Steps = (props) => {
   const { stepIndex } = props;
