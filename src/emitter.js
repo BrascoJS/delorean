@@ -15,11 +15,8 @@ export function handleMessages(message, listeners, item = null) {
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (item) {
-        console.log('listeners: ', listeners);
         let key = Object.keys(listeners)[0];
         let thisFunc = savedFuncs[key];
-        console.log('savedFuncs: ', savedFuncs);
-        // console.log('thisFunc: ', thisFunc);
         thisFunc(message);
       } else {
         listeners[id].forEach(fn => { fn(message); });

@@ -17,7 +17,9 @@ export function createAction(name, change) {
   let action;
   if (typeof change.newValue !== 'undefined') {
     action = { [change.name]: mobx.toJS(change.newValue) };
-  } else action = getPayload(change);
+  } else {
+    action = getPayload(change);
+  }
   action.type = `${name}`;
   return action;
 }

@@ -4,6 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
 import Steps from './stateSteps';
+import { parse } from 'jsan';
 
 class StateChangeStepper extends Component {
   constructor(props) {
@@ -20,33 +21,34 @@ class StateChangeStepper extends Component {
 in order to account for varying array lengths */
   getStepContent(stepIndex) {
     const { history, curIndex } = this.props;
-    // const lastAction = history[curIndex].action || '';
-    // console.log(lastAction);
+    const curStateObject = history[curIndex] || '';
+    let curAction = curStateObject;
+    let otherAction;
+    if (curStateObject !== '') curAction = curStateObject.action;
+    if (Array.isArray(curAction)) curAction = curStateObject.payload;
+    if (curAction !== '') otherAction = parse(curAction);
+
     switch (stepIndex) {
       case 0:
         return (
-          <p>
-            {curIndex}
-          </p>
+          <div>
+            {curAction}
+          </div>
         );
       case 1:
         return (
           <div>
-
-            <p>
-              {curIndex}
-            </p>
-            <p>Something something whatever cool</p>
+            {curAction}
           </div>
         );
       case 2:
         return (
-          <p>
-            This is ANOTHER state change!!!
-          </p>
+          <div>
+            {curAction}
+          </div>
         );
       default:
-        return 'You\'re a long way from home sonny jim!';
+        return 'Click the buttons to undo/redo consecutive actions';
     }
   }
 

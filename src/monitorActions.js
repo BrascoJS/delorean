@@ -13,7 +13,7 @@ function dispatch(store, { type, arguments: args }) {
 
 function dispatchRemotely(emitTool, store, payload) {
   try {
-    return evalMethod(payload, store);
+    evalMethod(payload, store);
   } catch (e) {
     emitTool.error(e.message);
   }

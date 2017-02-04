@@ -16,6 +16,7 @@ export default class Delorean extends Component {
 
     this.getData = this.getData.bind(this);
     this.sendUpdate = this.sendUpdate.bind(this);
+    this.getCurAction = this.getCurAction.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +26,24 @@ export default class Delorean extends Component {
   getData() {
     let history = parse(localStorage.getItem('appHistory'));
     this.setState({ history });
+  }
+
+  getCurAction() {
+    const curStateObject = this.state.history[this.state.currentIndex] || '';
+    let curAction = curStateObject;
+    if (curStateObject !== '') curAction = curStateObject.action;
+    if (Array.isArray(curAction)) curAction = curStateObject.payload;
+    if (curAction) curAction = parse(curAction).action.type;
+    const res = Object.keys(curAction).reduce((acc, cur) => {
+      // console.log('reducing: ', curAction[cur]);
+      if (curAction[cur] !== null && curAction[cur] != false) acc[cur] = curAction[cur];
+      if (Array.isArray(curAction[cur]) && curAction[cur].length) {
+        if (typeof curAction[cur][0] !== 'string') acc[cur] = curAction[cur][0].title;
+        else acc[cur] = curAction[cur][0];
+      }
+      return acc;
+    }, {});
+    return res;
   }
 
   sendUpdate(index, action) {
@@ -45,6 +64,7 @@ export default class Delorean extends Component {
             sendUpdate={this.sendUpdate}
             history={this.state.history}
             curIndex={this.state.currentIndex}
+            curAction={this.getCurAction}
           />
         </div>
       </MuiThemeProvider>

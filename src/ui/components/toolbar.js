@@ -14,7 +14,9 @@ const styles = {
 };
 
 const Toolbar = (props) => {
-  const { getData, sendUpdate, history, curIndex } = props;
+  const { getData, sendUpdate, history, curIndex, curAction } = props;
+  const actions = curAction();
+
   return (
     <Tabs>
       <Tab label="Time Travel" >
@@ -22,6 +24,7 @@ const Toolbar = (props) => {
           <SliderBar
             getData={getData}
             sendUpdate={sendUpdate}
+            curAction={curAction}
             history={history}
           />
         </div>
@@ -51,6 +54,7 @@ const Toolbar = (props) => {
 Toolbar.propTypes = {
   getData: React.PropTypes.func,
   sendUpdate: React.PropTypes.func,
+  curAction: React.PropTypes.func,
   history: React.PropTypes.array,
   curIndex: React.PropTypes.number
 };
