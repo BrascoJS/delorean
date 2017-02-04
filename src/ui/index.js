@@ -3,7 +3,7 @@ import Toolbar from './components/toolbar';
 import SliderExampleStep from './components/slider';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import StateChangeStepper from './components/stateChangeStepper';
-import { handleMessages } from './../emitter';
+import { handleMessages, history } from './../emitter';
 import { stringify, parse } from 'jsan';
 
 
@@ -23,15 +23,16 @@ export default class Delorean extends Component {
   }
 
   getData() {
-    let history = parse(localStorage.getItem('appHistory'));
     this.setState({ history });
   }
 
   sendUpdate(index, action) {
-    const message = this.state.history[index];
-    message.type = 'DISPATCH';
-    message.dispatch = action;
-    handleMessages(message, { [message.instanceId]: true }, 1);
+    if(this.state.history[index]){
+      const message = parse(this.state.history[index]);
+      message.type = 'DISPATCH';
+      message.dispatch = action;
+      handleMessages(message, { [message.instanceId]: true }, 1);
+    }
   }
 
   render() {
