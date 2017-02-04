@@ -29,16 +29,16 @@ export default class Delorean extends Component {
     this.setState({ history });
   }
 
-  // actionReducer(object) {
-  //   Object.keys(object).reduce((acc, cur) => {
-  //     if (object[cur] !== null && object[cur] != false) acc[cur] = object[cur];
-  //     if (Array.isArray(object[cur]) && object[cur].length) {
-  //       if (typeof object[cur][0] !== 'string') acc[cur] = object[cur][0].title;
-  //       else acc[cur] = object[cur][0];
-  //     }
-  //     return acc;
-  //   }, {});
-  // }
+  actionReducer(object) {
+    Object.keys(object).reduce((acc, cur) => {
+      if (object[cur] !== null && object[cur] != false) acc[cur] = object[cur];
+      if (Array.isArray(object[cur]) && object[cur].length) {
+        if (typeof object[cur][0] !== 'string') acc[cur] = object[cur][0].title;
+        else acc[cur] = object[cur][0];
+      }
+      return acc;
+    }, {});
+  }
 
   getCurAction() {
     const curStateObject = this.state.history[this.state.currentIndex] || '';

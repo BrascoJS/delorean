@@ -11,6 +11,9 @@ const styles = {
     marginBottom: 12,
     fontWeight: 400,
   },
+  text: {
+    marginLeft: 5
+  }
 };
 
 const Toolbar = (props) => {
@@ -25,12 +28,21 @@ const Toolbar = (props) => {
       }
     });
   }
+  let actions = '';
+  if (action) {
+    actions = `  action: ${action.type} `;
+    Object.keys(action).forEach((key, i) => {
+      if (key !== 'type') {
+        actions += `| ${key}: ${action[key]} `;
+      }
+    });
+  }
 
   return (
     <Tabs>
       <Tab label="Time Travel" >
-        <div>
-          Action: {type} {other}
+        <div >
+          <div style={styles.text}> {actions} </div>
           <SliderBar
             getData={getData}
             sendUpdate={sendUpdate}
