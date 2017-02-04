@@ -11,7 +11,7 @@ export default class Delorean extends Component {
     super(props);
     this.state = {
       history: [],
-      currentIndex: null,
+      currentIndex: history.length - 1,
       currentAction: null
     };
 
@@ -29,7 +29,10 @@ export default class Delorean extends Component {
   }
 
   getCurAction() {
-    const curStateObject = this.state.history[this.state.currentIndex] || '';
+    const stateObj = this.state.history[this.state.currentIndex];
+    let curStateObject;
+    if (stateObj) curStateObject = parse(stateObj);
+    else curStateObject = '';
     let curAction = curStateObject;
     if (curStateObject !== '') curAction = curStateObject.action;
     if (Array.isArray(curAction)) curAction = false;
