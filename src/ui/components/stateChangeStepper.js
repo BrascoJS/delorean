@@ -20,13 +20,7 @@ class StateChangeStepper extends Component {
 /* May have to change this function from switch statement to something else
 in order to account for varying array lengths */
   getStepContent(stepIndex) {
-    const { history, curIndex } = this.props;
-    const curStateObject = history[curIndex] || '';
-    let curAction = curStateObject;
-    let otherAction;
-    if (curStateObject !== '') curAction = curStateObject.action;
-    if (Array.isArray(curAction)) curAction = curStateObject.payload;
-    if (curAction !== '') otherAction = parse(curAction);
+    const { history, curIndex, curAction } = this.props;
 
     switch (stepIndex) {
       case 0:
@@ -60,7 +54,7 @@ in order to account for varying array lengths */
 
   handleNext = () => {
     const { stepIndex } = this.state;
-    const { sendUpdate, curIndex, history, getData } = this.props;
+    const { sendUpdate, curIndex, history, getData, getCurAction } = this.props;
     let newIndex = curIndex + 1;
     getData();
     if (newIndex > history.length - 1) newIndex = history.length - 1;
@@ -71,12 +65,13 @@ in order to account for varying array lengths */
         finished: stepIndex >= 2,
       }));
       sendUpdate(newIndex, 'JUMP_TO_STATE');
+      getCurAction();
     }
   };
 
   handlePrev = () => {
     const { stepIndex } = this.state;
-    const { sendUpdate, curIndex, getData } = this.props;
+    const { sendUpdate, curIndex, getData, getCurAction } = this.props;
     let newIndex = curIndex - 1;
     getData();
     if (newIndex < 0) newIndex = 0;
@@ -86,6 +81,7 @@ in order to account for varying array lengths */
         stepIndex: stepIndex - 1
       }));
       sendUpdate(newIndex, 'JUMP_TO_STATE');
+      getCurAction();
     }
   };
 
@@ -165,8 +161,10 @@ in order to account for varying array lengths */
 StateChangeStepper.propTypes = {
   sendUpdate: React.PropTypes.func,
   getData: React.PropTypes.func,
+  getCurAction: React.PropTypes.func,
   curIndex: React.PropTypes.number,
-  history: React.PropTypes.array
+  history: React.PropTypes.array,
+  curAction: React.PropTypes.string
 };
 
 export default StateChangeStepper;

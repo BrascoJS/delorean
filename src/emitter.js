@@ -11,7 +11,7 @@ const history = [];
 export function handleMessages(message, listeners, item = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
-    // if (message.instanceId && id !== message.instanceId) return;
+    if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (item) {

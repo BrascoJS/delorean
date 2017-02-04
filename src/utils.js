@@ -59,7 +59,7 @@ export function getMethods(obj) {
   if (typeof obj !== 'object') return undefined;
   let functions;
   let m;
-  if (obj.__proto__) m = obj.__proto__.__proto__;
+  if (Object.getPrototypeOf(obj)) m = Object.getPrototypeOf(Object.getPrototypeOf(obj));
   if (!m) m = obj;
 
   Object.getOwnPropertyNames(m).forEach(key => {
@@ -76,7 +76,7 @@ export function getMethods(obj) {
 }
 
 /* eslint-disable no-new-func */
-export const interpretArg = (arg) => (new Function('return ' + arg))();
+export const interpretArg = (arg) => (new Function(`return ${arg}`))();
 
 export function evalArgs(inArgs, restArgs) {
 
@@ -89,7 +89,7 @@ export function evalArgs(inArgs, restArgs) {
 
 export function evalMethod(action, obj) {
   if (typeof action === 'string') {
-    return (new Function('return ' + action)).call(obj);
+    return (new Function(`return ${action}`)).call(obj);
   }
 
   const args = evalArgs(action.args, action.rest);

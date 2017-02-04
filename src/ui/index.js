@@ -29,7 +29,30 @@ export default class Delorean extends Component {
     this.setState({ history });
   }
 
-  // actionReducer(object) {
+  getCurAction() {
+    const curStateObject = this.state.history[this.state.currentIndex] || '';
+    let curAction = curStateObject;
+    if (curStateObject !== '') curAction = curStateObject.action;
+    if (Array.isArray(curAction)) curAction = false;
+    if (curAction) curAction = parse(curAction).action.type;
+    const actions = Object.keys(curAction).reduce((acc, cur) => {
+      if (curAction[cur] !== null && curAction[cur] != false) acc[cur] = curAction[cur];
+      if (Array.isArray(curAction[cur]) && curAction[cur].length) {
+        if (typeof curAction[cur][0] !== 'string') acc[cur] = curAction[cur][0].title;
+        else acc[cur] = curAction[cur][0];
+      }
+      return acc;
+    }, {});
+    let currentAction = `  action: ${actions.type} `;
+    Object.keys(actions).forEach((key, i) => {
+      if (key !== 'type') {
+        currentAction += `| ${key}: ${actions[key]} `;
+      }
+    });
+    this.setState({ currentAction });
+  }
+
+  //   actionReducer(object) {
   //   Object.keys(object).reduce((acc, cur) => {
   //     if (object[cur] !== null && object[cur] != false) acc[cur] = object[cur];
   //     if (Array.isArray(object[cur]) && object[cur].length) {
@@ -39,24 +62,6 @@ export default class Delorean extends Component {
   //     return acc;
   //   }, {});
   // }
-
-  getCurAction() {
-    const curStateObject = this.state.history[this.state.currentIndex] || '';
-    let curAction = curStateObject;
-    if (curStateObject !== '') curAction = curStateObject.action;
-    if (Array.isArray(curAction)) curAction = false;
-    if (curAction) curAction = parse(curAction).action.type;
-    const currentAction = Object.keys(curAction).reduce((acc, cur) => {
-      // console.log('reducing: ', curAction[cur]);
-      if (curAction[cur] !== null && curAction[cur] != false) acc[cur] = curAction[cur];
-      if (Array.isArray(curAction[cur]) && curAction[cur].length) {
-        if (typeof curAction[cur][0] !== 'string') acc[cur] = curAction[cur][0].title;
-        else acc[cur] = curAction[cur][0];
-      }
-      return acc;
-    }, {});
-    this.setState({ currentAction });
-  }
 
   sendUpdate(index, action) {
     this.getData();
@@ -76,8 +81,8 @@ export default class Delorean extends Component {
             sendUpdate={this.sendUpdate}
             history={this.state.history}
             curIndex={this.state.currentIndex}
-            curAction={this.getCurAction}
-            action={this.state.currentAction}
+            getCurAction={this.getCurAction}
+            curAction={this.state.currentAction}
           />
         </div>
       </MuiThemeProvider>
