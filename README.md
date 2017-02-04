@@ -1,11 +1,11 @@
 # Delorean
-An intuitive, in-app MobX + React developer tool employing time travel debugging and (soon to be implemented) rich application state visualization. Quickly and easily debug any MobX-React project, with just two lines of code.
+An intuitive, in-app MobX + React developer tool employing time travel debugging and undo/redo actions. Quickly and easily gain insight into any MobX-React project, with just two lines of code.
 
 # Features
 - Flexible time travel functionality
 - Persistent log of every observable action and state change, including individual diffs and complete application state
 - Easy undo/redo of actions without unwanted side effects
-- Configurable visualization of relevant observables, observers, actions, computed values, and stores (coming soon)
+- Alternate timeline debugging. Reverse your application's state and branch into a new timeline with the option of returning to your original state.
 
 # Installation
 
@@ -41,10 +41,19 @@ import { delorean } from 'mobx-delorean';
 
 ...
 
-export default delorean(YourStore);
+export default delorean(YourStore, [config]);
 ```
 
-__Note__: Delorean relies on wrapping your MobX store export in order to track its obersvables and parse its dependency tree at runtime. If you are using multiple stores, you can wrap them separately and Delorean will track them individually.
+####config
+  - arguments
+    - **name** (*string*): the instance name to be shown in the toolbar
+    - **onlyActions** (*boolean*): if true, Delorean will only track actions. Using MobX in strict mode causes a default to true
+    - **global** (*boolean*): if true, Delorean will assign dispatching of unhandled actions to this global store
+    - **filters** (*object*): whitelist or blacklist certain action types using an array of regular expressions as strings
+      - **whitelist** any other actions will be ignored by Delorean
+      - **blacklist** Delorean will ignore this action
+      
+__Note__: Delorean relies on wrapping your MobX store export in order to track its obersvables and parse its dependency tree at runtime. If you are using multiple stores, you can wrap them separately and Delorean will track them in a singular UI.
 
 Open your MobX app in the browser and notice the Delorean toolbar at the top of your app. In order from left to right:
 
