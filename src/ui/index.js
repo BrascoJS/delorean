@@ -68,7 +68,7 @@ export default class Delorean extends Component {
   sendUpdate(index, action) {
     this.getData();
     this.setState({ currentIndex: index });
-    if(this.state.history[index]){
+    if (this.state.history[index]) {
       const message = parse(this.state.history[index]);
       message.type = 'DISPATCH';
       message.dispatch = action;

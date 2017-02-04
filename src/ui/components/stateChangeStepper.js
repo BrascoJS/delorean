@@ -87,7 +87,7 @@ in order to account for varying array lengths */
 
   renderContent() {
     const { finished, stepIndex } = this.state;
-    const { sendUpdate } = this.props;
+    const { sendUpdate, getCurAction } = this.props;
     const contentStyle = { margin: '0 16px', overflow: 'hidden' };
 
     if (finished) {
@@ -100,6 +100,7 @@ in order to account for varying array lengths */
                 event.preventDefault();
                 sendUpdate(0, 'RESET');
                 this.setState({ stepIndex: 0, finished: false });
+                getCurAction();
               }}
             >
               Click here
