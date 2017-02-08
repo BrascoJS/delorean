@@ -25,11 +25,13 @@ class Cytoscape extends Component{
     	elements: A()
 	});
     this.cy = cy;
+    this.cy.resize();
     this.cy.json({elements: A.elements});
     this.cy.on("select", (ID) => {
     	ID = Object.keys(this.cy.elements(':selected')['_private']['indexes'])[0];
     	this.props.sendUpdate(ID, 'JUMP_TO_STATE');
 		});
+
   }
 
   shouldComponentUpdate(){
@@ -39,11 +41,15 @@ class Cytoscape extends Component{
 
 
   componentWillReceiveProps(nextProps){
-  	
-  	ID = Object.keys(this.cy.elements(':selected')['_private']['indexes'])[0];	
-  	
-  	this.props.getSelected();
+  	this.cy.resize();
     this.cy.json({elements: A()});
+  	ID = Object.keys(this.cy.elements(':selected')['_private']['indexes'])[0];
+  	if(this.props.selected){
+  	this.cy.$('#' + this.props.selected.toString()).json({ selected: false });
+  	this.cy.$('#' + (this.props.selected + 1).toString()).json({ selected: true });	
+  	console.log('selectedpost', Object.keys(this.cy.elements(':selected')['_private']['indexes'])[0])
+  	}
+
   }
 
   componentWillUnmount(){

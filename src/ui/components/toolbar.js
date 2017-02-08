@@ -52,9 +52,9 @@ class Toolbar extends Component{
           />
         </div>
       </Tab>
-      <Tab label="Dependency Tree">
-        <div>
-        <Cytoscape ref="graph" getSelected={this.props.getSelected} currentLocal={this.props.curIndex} getData={this.props.getData} sendUpdate={this.props.sendUpdate}/>
+      <Tab label="Dependency Tree" onKeyDown={(e)=>this.props.navigate(e)}>
+        <div >
+        <Cytoscape ref="graph" getSelected={this.props.getSelected} currentLocal={this.props.curIndex} getData={this.props.getData} sendUpdate={this.props.sendUpdate} selected={this.props.selected}/>
         </div>
       </Tab>
     </Tabs>

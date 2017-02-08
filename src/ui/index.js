@@ -17,15 +17,15 @@ export default class Delorean extends Component {
       currentAction: null,
       selected: null,
       curIndex: 0
+      
     };
    
 
-    this.getSelected = this.getSelected.bind(this);
     this.getData = this.getData.bind(this);
     this.sendUpdate = this.sendUpdate.bind(this);
     this.getCurAction = this.getCurAction.bind(this);
     this.handleKey = this.handleKey.bind(this);
-   
+    this.navigate = this.navigate.bind(this);
   }
 
   componentDidMount() {
@@ -65,26 +65,27 @@ export default class Delorean extends Component {
   } 
 }
 }
-  //   actionReducer(object) {
-  //   Object.keys(object).reduce((acc, cur) => {
-  //     if (object[cur] !== null && object[cur] != false) acc[cur] = object[cur];
-  //     if (Array.isArray(object[cur]) && object[cur].length) {
-  //       if (typeof object[cur][0] !== 'string') acc[cur] = object[cur][0].title;
-  //       else acc[cur] = object[cur][0];
-  //     }
-  //     return acc;
-  //   }, {});
-  // }
+
+navigate(event){
+  let key = event.keyCode || event.charCode;
+  if(key === 39){
+    let old = this.state.selected;
+    old++;
+    this.setState({selected: old});
+    this.sendUpdate(old, 'JUMP_TO_STATE');
+  }
+
+  console.log(this.state.selected)
+  console.log(event.keyCode || event.charCode);
+}
+
+
+
 handleKey(e){
 
   console.log('dfs');
 }
 
-
-  getSelected(){
-    //console.log(ID);
-    //this.setState({selected: id});
-  }
 
   sendUpdate(index, action) {
     console.log(ID)
@@ -136,7 +137,8 @@ handleKey(e){
             curIndex={this.state.currentIndex}
             getCurAction={this.getCurAction}
             curAction={this.state.currentAction}
-            getSelected={this.getSelected}
+            navigate={this.navigate}
+            selected={this.state.selected}
 
           />
           
