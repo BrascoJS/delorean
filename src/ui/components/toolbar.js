@@ -13,6 +13,14 @@ const styles = {
   text: {
     marginLeft: 5,
     paddingTop: 10
+  },
+  tool: {
+    position: 'fixed',
+    top: 0,
+    backgroundColor: 'white',
+    boxShadow: '0 3px 5px 0 rgba(0, 0, 0, 0.2)',
+    minWidth: 550,
+    marginBottom: 200
   }
 };
 
@@ -20,7 +28,7 @@ const Toolbar = (props) => {
   const { getData, sendUpdate, history, curIndex, getCurAction, curAction } = props;
 
   return (
-    <Tabs>
+    <Tabs style={styles.tool}>
       <Tab label="Time Travel" >
         <div >
           <div style={styles.text}> {curAction} </div>
