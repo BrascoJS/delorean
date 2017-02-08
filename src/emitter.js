@@ -4,21 +4,52 @@ import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
 import { setValue } from './utils.js';
 import getDecorator from './getDecorator.js';
 import dev from './dev.js';
+import {addNode} from './ui/components/Tree.js';
 
+let savedPos = null;
 let savedFuncs = {};
-export const history = [];
+let lastRecordedIndex = -1;
 
-export function handleMessages(message, listeners, item = null) {
+export let history = [];
+
+export function handleMessages(message, listeners, item = savedPos, whodis = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
-      if (item) {
+      if (whodis) {
+
+        savedPos = item;
         let key = Object.keys(listeners)[0];
         let thisFunc = savedFuncs[key];
         thisFunc(message);
+
       } else {
+        if (message.type === 'ACTION') {
+          if(item) item = item.toString();
+          else if(savedPos) item = savedPos.toString();
+
+         savedPos = addNode(item, stringify(message), history);
+        //if(item) savedPos = item + '.0';
+        
+          // if(lastRecordedIndex+1 === history.length){  
+          // history.push(stringify(message));
+          // lastRecordedIndex++;
+        
+          // } else {
+          //   if(typeof history[lastRecordedIndex+1] === 'string'){
+          //     let hold = history[lastRecordedIndex+1];
+          //     history[lastRecordedIndex+1] = [hold];
+          //     history[lastRecordedIndex+1].push(stringify(message));
+          //   }else{
+          //     history[lastRecordedIndex+1].push(stringify(message));
+
+          //   }
+
+          // }
+
+        }
         listeners[id].forEach(fn => { fn(message); });
       }
     }
@@ -47,7 +78,6 @@ function send(action, state, options, type, instanceId, listeners) {
       name: options.name,
       location: window.location.hash
     };
-    if (message.type === 'ACTION') history.push(stringify(message));
     let key = Object.keys(listeners)[0];
     savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);

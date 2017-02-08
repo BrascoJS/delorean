@@ -5,6 +5,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import StateChangeStepper from './components/stateChangeStepper';
 import { handleMessages, history } from './../emitter';
 import { stringify, parse } from 'jsan';
+import Cytoscape from './components/cy';
+import {ID} from './components/cy';
 
 export default class Delorean extends Component {
   constructor(props) {
@@ -12,24 +14,35 @@ export default class Delorean extends Component {
     this.state = {
       history: [],
       currentIndex: null,
-      currentAction: null
+      currentAction: null,
+      selected: null,
+      curIndex: 0
     };
+   
 
+    this.getSelected = this.getSelected.bind(this);
     this.getData = this.getData.bind(this);
     this.sendUpdate = this.sendUpdate.bind(this);
     this.getCurAction = this.getCurAction.bind(this);
+    this.handleKey = this.handleKey.bind(this);
+   
   }
 
   componentDidMount() {
+    //this.refs.graph.getCy().on()
     this.getData();
   }
 
   getData() {
+
     this.setState({ history });
   }
+  
 
   getCurAction() {
-    const curStateObject = this.state.history[this.state.currentIndex] || '';
+    if(this.state.history[this.state.currentIndex]){
+      if(!Array.isArray(this.state.history[this.state.currentIndex])){
+    const curStateObject = parse(this.state.history[this.state.currentIndex]) || '';
     let curAction = curStateObject;
     if (curStateObject !== '') curAction = curStateObject.action;
     if (Array.isArray(curAction)) curAction = false;
@@ -49,8 +62,9 @@ export default class Delorean extends Component {
       }
     });
     this.setState({ currentAction });
-  }
-
+  } 
+}
+}
   //   actionReducer(object) {
   //   Object.keys(object).reduce((acc, cur) => {
   //     if (object[cur] !== null && object[cur] != false) acc[cur] = object[cur];
@@ -61,19 +75,57 @@ export default class Delorean extends Component {
   //     return acc;
   //   }, {});
   // }
+handleKey(e){
+
+  console.log('dfs');
+}
+
+
+  getSelected(){
+    //console.log(ID);
+    //this.setState({selected: id});
+  }
 
   sendUpdate(index, action) {
+    console.log(ID)
+    if(index[0] === 'e')return;
+    this.setState({selected: index});
     this.getData();
-    this.setState({ currentIndex: index });
-    if(this.state.history[index]){
-      const message = parse(this.state.history[index]);
+    if(index){
+      let curr = this.state.history;
+      let id = index.toString().split('.');
+      let ind;
+      while(id.length > 1){
+        ind = Number(id[0]);
+        curr = curr[ind];
+        id.splice(0,1);
+      }
+      ind = Number(id[0]);
+      const message = parse(curr[ind]);
       message.type = 'DISPATCH';
       message.dispatch = action;
-      handleMessages(message, { [message.instanceId]: true }, 1);
+      handleMessages(message, { [message.instanceId]: true }, index, 1);
     }
+    // this.getData();
+    // this.setState({ currentIndex: index });
+    // if(this.state.history[index]){
+    //   if(!Array.isArray(this.state.history[index])){
+    //   const message = parse(this.state.history[index]);
+    //   message.type = 'DISPATCH';
+    //   message.dispatch = action;
+    //   handleMessages(message, { [message.instanceId]: true }, index, 1);
+    // } else {
+    //   const message = parse(this.state.history[index][0]);
+    //   message.type = 'DISPATCH';
+    //   message.dispatch = action;
+    //   handleMessages(message, { [message.instanceId]: true }, index, 1);
+    // }
+
+    // }
   }
 
   render() {
+
     return (
       <MuiThemeProvider>
         <div>
@@ -84,9 +136,13 @@ export default class Delorean extends Component {
             curIndex={this.state.currentIndex}
             getCurAction={this.getCurAction}
             curAction={this.state.currentAction}
+            getSelected={this.getSelected}
+
           />
+          
         </div>
       </MuiThemeProvider>
     );
   }
 }
+
