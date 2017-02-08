@@ -1,9 +1,7 @@
-import { stringify, parse } from 'jsan';
-import { schedule } from './spy.js';
-import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
+import { stringify } from 'jsan';
 import { setValue } from './utils.js';
 
-let savedFuncs = {};
+const savedFuncs = {};
 export const history = [];
 
 export function handleMessages(message, listeners, item = null) {
@@ -13,8 +11,8 @@ export function handleMessages(message, listeners, item = null) {
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (item) {
-        let key = Object.keys(listeners)[0];
-        let thisFunc = savedFuncs[key];
+        const key = Object.keys(listeners)[0];
+        const thisFunc = savedFuncs[key];
         thisFunc(message);
       } else {
         listeners[id].forEach(fn => { fn(message); });
@@ -36,7 +34,6 @@ function formatAction(action) {
 
 function send(action, state, options, type, instanceId, listeners) {
   setTimeout(() => {
-
     const message = {
       payload: state ? stringify(state) : '',
       action: type === 'ACTION' ? stringify(formatAction(action, options)) : action,
@@ -46,7 +43,7 @@ function send(action, state, options, type, instanceId, listeners) {
       location: window.location.hash
     };
     if (message.type === 'ACTION') history.push(stringify(message));
-    let key = Object.keys(listeners)[0];
+    const key = Object.keys(listeners)[0];
     savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);
   }, 0);

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import Slider from 'material-ui/Slider';
 import StateChangeStepper from './stateChangeStepper';
 import SliderBar from './slider';
 

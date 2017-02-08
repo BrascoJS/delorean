@@ -3,7 +3,6 @@ import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
-import Steps from './stateSteps';
 
 class StateChangeStepper extends Component {
   constructor(props) {
@@ -11,13 +10,10 @@ class StateChangeStepper extends Component {
     this.state = {
       loading: false,
       finished: false,
-      steps: [],
       stepIndex: 0
     };
   }
 
-/* May have to change this function from switch statement to something else
-in order to account for varying array lengths */
   getStepContent(stepIndex) {
     const { history, curIndex, curAction } = this.props;
 
@@ -131,10 +127,6 @@ in order to account for varying array lengths */
 
   render() {
     const { loading, stepIndex } = this.state;
-
-    // const stateSteps = this.state.steps.map((step, index) => {
-    //   return <Steps key={index} />
-    // })
 
     return (
       <div style={{ width: '100%', maxWidth: 700, margin: 'auto' }}>

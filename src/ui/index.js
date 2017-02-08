@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Toolbar from './components/toolbar';
-import SliderExampleStep from './components/slider';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import StateChangeStepper from './components/stateChangeStepper';
 import { handleMessages, history } from './../emitter';
-import { stringify, parse } from 'jsan';
+import { parse } from 'jsan';
 
 export default class Delorean extends Component {
   constructor(props) {
