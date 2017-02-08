@@ -17,28 +17,14 @@ class StateChangeStepper extends Component {
   getStepContent(stepIndex) {
     const { history, curIndex, curAction } = this.props;
 
-    switch (stepIndex) {
-      case 0:
-        return (
-          <div>
-            {curAction}
-          </div>
-        );
-      case 1:
-        return (
-          <div>
-            {curAction}
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            {curAction}
-          </div>
-        );
-      default:
-        return 'Click the buttons to undo/redo consecutive actions';
+    if (stepIndex >= 0 && stepIndex <= history.length - 1) {
+      return (
+        <div>
+          {curAction}
+        </div>
+      );
     }
+    return 'Click the buttons to undo/redo consecutive actions';
   }
 
   dummyAsync = (cb) => {
@@ -57,7 +43,7 @@ class StateChangeStepper extends Component {
       this.dummyAsync(() => this.setState({
         loading: false,
         stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
+        finished: stepIndex >= history.length - 1,
       }));
       sendUpdate(newIndex, 'JUMP_TO_STATE');
       getCurAction();
@@ -82,7 +68,7 @@ class StateChangeStepper extends Component {
 
   renderContent() {
     const { finished, stepIndex } = this.state;
-    const { sendUpdate, getCurAction } = this.props;
+    const { history, sendUpdate, getCurAction } = this.props;
     const contentStyle = { margin: '0 16px', overflow: 'hidden' };
 
     if (finished) {
@@ -116,7 +102,7 @@ class StateChangeStepper extends Component {
             style={{ marginRight: 12 }}
           />
           <RaisedButton
-            label={stepIndex === 2 ? 'Finish' : 'Redo'}
+            label={stepIndex === history.length - 1 ? 'Finish' : 'Redo'}
             primary
             onClick={this.handleNext}
           />
@@ -130,18 +116,6 @@ class StateChangeStepper extends Component {
 
     return (
       <div style={{ width: '100%', maxWidth: 700, margin: 'auto' }}>
-        <Stepper activeStep={stepIndex}>
-          <Step>
-            <StepLabel>Initial State</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>State Change 1</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>State Change 2</StepLabel>
-          </Step>
-
-        </Stepper>
         <ExpandTransition loading={loading} open>
           {this.renderContent()}
         </ExpandTransition>
