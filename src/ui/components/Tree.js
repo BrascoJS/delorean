@@ -1,5 +1,5 @@
-import {history} from './../../emitter';
-import {ID} from './cy';
+import { history } from './../../emitter';
+import { ID } from './cy';
 const baseX = 100;
 const baseY = 100;
 let X;
@@ -8,14 +8,12 @@ let interval = 75;
 let datas = [];
 let extras = [];
 
+function updateDataPoints() {
+  datas = [];
+  extras = [];
+  drawTree (assignID(history));
 
-function updateDataPoints(){
-datas = [];
-extras = [];
-drawTree(assignID(history));
-
-
-return datas.concat(extras);
+  return datas.concat(extras);
 }
 
 export const A = () => updateDataPoints();
@@ -86,46 +84,46 @@ function drawTree(idArray){
 
 function assignID(history, local, idArray = [], id = ''){
   let testId = id;
-	for(let i = 0; i < history.length; i++){
+	for (let i = 0; i < history.length; i++){
 	  testId = id + i.toString();
-		if(Array.isArray(history[i])){
+		if (Array.isArray(history[i])) {
 			testId += '.';
 			assignID(history[i], local, idArray, testId)
-		}else{
-			if(history[i].match(/ΩΩΩΩ/i) !== null){
+		} else {
+			if (history[i].match(/ΩΩΩΩ/i) !== null) {
 				history[i] = history[i].replace('ΩΩΩΩ', '');
 				testId = '∑' + testId;
 				idArray.push(testId);
-			}else if(local == testId){
+			} else if (local == testId) {
 				testId = '∑' + testId;
 				idArray.push(testId);
-
-			}else{
+			} else {
 				idArray.push(testId);
 			}
 		}
 	}
-	
 	return idArray;
 }
 
 let lastLocal;
-export function addNode(currLocal, newState, history){
-	
+export function addNode(currLocal, newState, history) {
+
 	let hold;
-	if(!currLocal && !lastLocal) {history.push("ΩΩΩΩ" + newState); hold =assignID(history, currLocal); return hold.reduce((acc, index, value) => {
-		if(value.toString().match(/[∑]/gi) !== null) acc = value;
-	});} 
-	if(!currLocal) currLocal = lastLocal;
+	if (!currLocal && !lastLocal) {
+    history.push("ΩΩΩΩ" + newState); hold = assignID(history, currLocal); return hold.reduce((acc, index, value) => {
+		if (value.toString().match(/[∑]/gi) !== null) acc = value;
+	});
+} 
+	if (!currLocal) currLocal = lastLocal;
 	lastLocal = currLocal;
 	let path = currLocal.toString().replace(/[∑]/gi, '').split('.');
 	let workArr = history;
 	let depth = 2;
-	if(history.length === 0) {
+	if (history.length === 0) {
 	  history.push("ΩΩΩΩ" + newState);
 	  hold = assignID(history, currLocal);
 	  return hold.reduce((acc, index, value) => {
-		if(value.toString().match(/[∑]/gi) !== null) acc = value;
+		  if (value.toString().match(/[∑]/gi) !== null) acc = value;
 	});
 	}
 	while(path.length > 1){
@@ -139,7 +137,7 @@ export function addNode(currLocal, newState, history){
 	} else {
 	  if(path[0] == '0' && currLocal.length > 1){
 	    workArr.push("ΩΩΩΩ" + newState);
-	  }else{
+	  } else {
 	    if(!Array.isArray(workArr[path[0]])){
 	    	hold = workArr[path[0]];
 	    	workArr[path[0]] = [hold, newState];
@@ -149,12 +147,10 @@ export function addNode(currLocal, newState, history){
 	    }
 	  }
 		hold = assignID(history, currLocal);
-
-
 	}
-	hold =assignID(history, currLocal);
+	hold = assignID(history, currLocal);
 	return hold.reduce((acc, index, value) => {
-		if(value.toString().match(/[∑]/gi) !== null) acc = value;
+		if (value.toString().match(/[∑]/gi) !== null) acc = value;
 	});
 	
 }

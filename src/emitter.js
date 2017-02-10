@@ -1,6 +1,6 @@
 import { stringify } from 'jsan';
 import { setValue } from './utils.js';
-import {addNode} from './ui/components/Tree.js';
+import { addNode } from './ui/components/Tree.js';
 
 let savedPos = null;
 let savedFuncs = {};
@@ -20,9 +20,9 @@ export function handleMessages(message, listeners, item = savedPos, whodis = nul
         thisFunc(message);
       } else {
         if (message.type === 'ACTION') {
-          if(item) item = item.toString();
-          else if(savedPos) item = savedPos.toString();
-         savedPos = addNode(item, stringify(message), history);
+          if (item) item = item.toString();
+          else if (savedPos) item = savedPos.toString();
+          savedPos = addNode(item, stringify(message), history);
         }
         listeners[id].forEach(fn => { fn(message); });
       }
