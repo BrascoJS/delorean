@@ -15,12 +15,11 @@ const styles = {
     paddingTop: 10
   },
   tool: {
-    position: 'fixed',
-    top: 0,
+    // position: 'fixed',
+    // top: 0,
     backgroundColor: 'white',
     boxShadow: '0 3px 5px 0 rgba(0, 0, 0, 0.2)',
     minWidth: 550,
-    marginBottom: 200
   }
 };
 
