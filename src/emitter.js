@@ -5,7 +5,7 @@ import { addNode } from './ui/components/Tree.js';
 let savedPos = null;
 let savedFuncs = {};
 let lastRecordedIndex = -1;
-export let history = [];
+export const history = [];
 
 export function handleMessages(message, listeners, item = savedPos, whodis = null) {
   if (!message.payload) message.payload = message.action;
