@@ -2,6 +2,8 @@ import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import StateChangeStepper from './stateChangeStepper';
 import SliderBar from './slider';
+import Cytoscape from './cy';
+import {Component} from 'react';
 
 const styles = {
   headline: {
@@ -16,53 +18,58 @@ const styles = {
   },
 };
 
-const Toolbar = (props) => {
-  const { getData, sendUpdate, history, curIndex, getCurAction, curAction } = props;
+class Toolbar extends Component{
+  constructor(props){
+    super(props);
+  }
+  //const { getData, sendUpdate, history, curIndex, getCurAction, curAction, getSelected } = props;
 
+
+  render(){
   return (
+    
     <Tabs>
       <Tab label="Time Travel" >
         <div >
-          <div style={styles.text}> {curAction} </div>
+          <div style={styles.text}> {this.props.curAction} </div>
           <SliderBar
-            getData={getData}
-            sendUpdate={sendUpdate}
-            getCurAction={getCurAction}
-            history={history}
+            getData={this.props.getData}
+            sendUpdate={this.props.sendUpdate}
+            getCurAction={this.props.getCurAction}
+            history={this.props.history}
           />
         </div>
       </Tab>
       <Tab label="Undo/Redo" >
         <div>
           <StateChangeStepper
-            getData={getData}
-            sendUpdate={sendUpdate}
-            history={history}
-            curIndex={curIndex}
-            curAction={curAction}
-            getCurAction={getCurAction}
+            getData={this.props.getData}
+            sendUpdate={this.props.sendUpdate}
+            history={this.props.history}
+            curIndex={this.props.curIndex}
+            curAction={this.props.curAction}
+            getCurAction={this.props.getCurAction}
           />
         </div>
       </Tab>
-      <Tab label="Dependency Tree">
-        <div>
-          <h2 style={styles.headline}>Plant Tree Here</h2>
-          <p>
-            And watch it grow!
-          </p>
+      <Tab label="Dependency Tree" onKeyDown={(e)=>this.props.navigate(e)}>
+        <div >
+        <Cytoscape ref="graph" getSelected={this.props.getSelected} currentLocal={this.props.curIndex} getData={this.props.getData} sendUpdate={this.props.sendUpdate} selected={this.props.selected}/>
         </div>
       </Tab>
     </Tabs>
+   
   );
 };
 
-Toolbar.propTypes = {
-  getData: React.PropTypes.func,
-  sendUpdate: React.PropTypes.func,
-  getCurAction: React.PropTypes.func,
-  history: React.PropTypes.array,
-  curIndex: React.PropTypes.number,
-  curAction: React.PropTypes.string
-};
+// Toolbar.propTypes = {
+//   getData: React.PropTypes.func,
+//   sendUpdate: React.PropTypes.func,
+//   getCurAction: React.PropTypes.func,
+//   history: React.PropTypes.array,
+//   curIndex: React.PropTypes.number,
+//   curAction: React.PropTypes.string
+// };
+}
 
 export default Toolbar;
