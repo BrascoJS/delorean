@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Scrolling Nav - Start Bootstrap Template</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/scrolling-nav.css" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<!-- The #page-top ID is part of the scrolling feature - the data-spy and data-target are part of the built-in Bootstrap scrollspy function -->
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">DELOREAN</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a class="page-scroll" href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#services">Documentation</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">Download</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Section -->
+    <section id="intro" class="intro-section">
+      <div class='container'>
+    <div class="row">
+      <div class='col-lg-12'>
+        <img src='./assets/deloreanlogo.png' height='300' id='logo'/>
+        <h1 style={{marginBottom: '1.7em'}}>DELOREAN HAS ARRIVED</h1>
+        <h3>Delorean is an intuitive, in-app MobX + React developer
+        tool employing <br/> time travel debugging and rich application state
+        visualization.</h3>
+        <h3>We provide developers the ability to step through their
+          application state changes, <br/> along with undo/redo action functionality
+          free of side effects.
+
+        </h3>
+
+
+      </div>
+    </div>
+  </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <div class='container'>
+    <div class="row">
+    <div class="col-lg-12">
+      <h1>About</h1>
+        <div class='col-lg-4'>
+          <img id='mobx' src='./assets/mobxlogo.png' height='200'/>
+          <h3>Use the power of MobX observables <br/> to track and
+            review your application state changes
+          </h3>
+        </div>
+        <div class='col-lg-4'>
+          <img id='tree' src='./assets/tree.png' height='200'/>
+            <h3>Visualize your MobX dependency relationships with <br/>our D3
+              data tree.
+            </h3>
+        </div>
+        <div class='col-lg-4'>
+          <img id='clock' src='./assets/clock.png' height='200'/>
+            <h3>Create alternate state timelines free  of <br/>
+            side-effects within your application.
+            </h3>
+        </div>
+      </div>
+    </div>
+  </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="docs-section">
+      <div class='container'>
+    <div class='row'>
+      <div class='col-lg-12'>
+      <h1>Documentation</h1>
+      <div id='docwrapper'>
+        <h2>DELOREAN</h2>
+        <h3>
+          <small><em>Enabling seamless time-travel debugging and dependency
+          tree visualization in MobX</em></small>
+        </h3>
+        <h3>Description</h3>
+        <p>Delorean is a React library for MobX developers. Its purpose is to
+        provide users with the ability to rewind through their various state
+        changes, and efficiently detect bugs nested within their code.</p>
+        <p>Our caching algorithm uses MobX observables to log each and every
+        state change as the developer tests his or her application. </p>
+        <p>A combination of React with D3 provides the user with necessary
+        visualization tools so that he or she can traverse through the
+        dependency tree, scroll through various state changes, and even create
+        alternate timelines based on varying application use cases.</p>
+        <h3>Installation</h3>
+        <p>
+          <strong>Using NPM:</strong>
+          <pre><code>npm install mobx-delorean --save-dev</code></pre>
+        </p>
+        <h3>Getting Started</h3>
+        <p>Import DeloreanTools and delorean from the mobx-delorean module.</p>
+        <pre>
+          <code>
+  // in top level React component file
+  import { DeloreanTools } from 'mobx-delorean';
+    render() {
+      return (
+        &lt;div&gt;
+          &lt;DeloreanTools /&gt;
+          &lt;YourComponent /&gt;
+        &lt;div&gt;
+      )
+    }
+          </code>
+        </pre>
+        <pre>
+          <code>
+// in MobX store files(s)
+import { delorean } from 'mobx-delorean';
+...
+export default delorean(YourStore);
+          </code>
+        </pre>
+        <p><strong>Note:</strong> Delorean relies on wrapping your MobX store
+        export in order to track its obersvables and parse its dependency tree
+        at runtime. If you are using multiple stores, you can wrap them
+        separately and Delorean will track them individually.</p>
+        <p>Open your MobX app in the browser and notice the Delorean toolbar
+        at the top of your app. In order from left to right:</p>
+        <ol>
+          <li><strong>Time Travel Slider</strong> - Click to toggle the time travel slider&#39;s
+          visibility. Drag and drop the position marker to traverse through
+          the log of previous application states.</li>
+          <li><strong>Undo/Redo Actions</strong> - Step forward and back through your application&#39;s
+          state one action at a time with specific details about each change.</li>
+          <li><strong>Store Structure Visualizer</strong> - Open a new tab with a rich heirarchy
+          visualization of your MobX store&#39;s dependency tree. </li>
+        </ol>
+        <h3>Authors</h3>
+          <p>
+            <a href='https://github.com/max-marcus'>Max Marcus</a><br/>
+            <a href='https://github.com/morganpierson'>Morgan Pierson</a><br/>
+            <a href='https://github.com/mbieronski'>Mike Bieronski</a>
+          </p>
+        <h3>Support</h3>
+          <p>
+            <a href='https://github.com/BrascoJS/delorean/issues'>Github Issues</a>
+          </p>
+        <h3>Contributions</h3>
+          <p>We welcome your contributions!</p>
+          <p>Checkout our <a href='https://github.com/BrascoJS/delorean'>GitHub repo</a></p>
+        <h3>License</h3>
+          <p><a href='https://github.com/BrascoJS/delorean/blob/master/LICENSE'>MIT</a></p>
+      </div>
+      </div>
+    </div>
+  </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="download-section">
+      <div class='container'>
+    <div class='row'>
+      <h1>Get Delorean</h1>
+      <h3><small>Join our community, contribute to our code, report any bugs</small></h3>
+      <a href='https://github.com/BrascoJS/delorean'>
+        <img src='./assets/githublogo.png' height='200'/>
+      </a>
+      <a href='https://www.npmjs.com/package/mobx-delorean'>
+        <img src='./assets/npmlogo.png' height='100'/>
+      </a>
+    </div>
+  </div>
+    </section>
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Scrolling Nav JavaScript -->
+    <script src="js/jquery.easing.min.js"></script>
+    <script src="js/scrolling-nav.js"></script>
+
+</body>
+
+</html>

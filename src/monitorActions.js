@@ -1,9 +1,8 @@
 import mobx from 'mobx';
-import { stringify, parse } from 'jsan';
-import getParams from 'get-params';
-import { silently, setValue, getMethods, interpretArgs, evalArgs, evalMethod } from './utils';
+import { parse } from 'jsan';
+import { silently, setValue, getMethods, evalMethod } from './utils';
 
-export const isMonitorAction = (store) => store.__isRemotedevAction === true;
+export const isMonitorAction = (store) => store.__isDeloreanAction === true;
 
 function dispatch(store, { type, arguments: args }) {
   if (typeof store[type] === 'function') {
@@ -43,7 +42,6 @@ function toggleAction(store, id, strState) {
 
 export function dispatchMonitorAction(store, emitTool, onlyActions) {
   const initValue = mobx.toJS(store);
-  const theStore = store;
   emitTool.init(initValue, getMethods(store));
 
   return (message) => {
@@ -52,15 +50,8 @@ export function dispatchMonitorAction(store, emitTool, onlyActions) {
         case 'RESET':
           emitTool.init(setValue(store, initValue));
           return;
-        case 'COMMIT':
-          emitTool.init(mobx.toJS(store));
-          return;
-        case 'ROLLBACK':
-          emitTool.init(setValue(theStore, message.state));
-          return;
         case 'JUMP_TO_STATE':
-        case 'JUMP_TO_ACTION':
-          setValue(theStore, parse(message.payload));
+          setValue(store, parse(message.payload));
           return;
         case 'TOGGLE_ACTION':
           if (!onlyActions) {

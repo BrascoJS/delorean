@@ -1,15 +1,10 @@
-import { stringify, parse } from 'jsan';
-import { schedule } from './spy.js';
-import { dispatchMonitorAction, dispatchRemotely } from './monitorActions.js';
+import { stringify } from 'jsan';
 import { setValue } from './utils.js';
-import getDecorator from './getDecorator.js';
-import dev from './dev.js';
 import {addNode} from './ui/components/Tree.js';
 
 let savedPos = null;
 let savedFuncs = {};
 let lastRecordedIndex = -1;
-
 export let history = [];
 
 export function handleMessages(message, listeners, item = savedPos, whodis = null) {
@@ -19,36 +14,15 @@ export function handleMessages(message, listeners, item = savedPos, whodis = nul
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
       if (whodis) {
-
         savedPos = item;
         let key = Object.keys(listeners)[0];
         let thisFunc = savedFuncs[key];
         thisFunc(message);
-
       } else {
         if (message.type === 'ACTION') {
           if(item) item = item.toString();
           else if(savedPos) item = savedPos.toString();
-
          savedPos = addNode(item, stringify(message), history);
-        //if(item) savedPos = item + '.0';
-        
-          // if(lastRecordedIndex+1 === history.length){  
-          // history.push(stringify(message));
-          // lastRecordedIndex++;
-        
-          // } else {
-          //   if(typeof history[lastRecordedIndex+1] === 'string'){
-          //     let hold = history[lastRecordedIndex+1];
-          //     history[lastRecordedIndex+1] = [hold];
-          //     history[lastRecordedIndex+1].push(stringify(message));
-          //   }else{
-          //     history[lastRecordedIndex+1].push(stringify(message));
-
-          //   }
-
-          // }
-
         }
         listeners[id].forEach(fn => { fn(message); });
       }
@@ -66,10 +40,8 @@ function formatAction(action) {
   return formattedAction;
 }
 
-
 function send(action, state, options, type, instanceId, listeners) {
   setTimeout(() => {
-
     const message = {
       payload: state ? stringify(state) : '',
       action: type === 'ACTION' ? stringify(formatAction(action, options)) : action,
@@ -79,6 +51,7 @@ function send(action, state, options, type, instanceId, listeners) {
       location: window.location.hash
     };
     let key = Object.keys(listeners)[0];
+    // if (message.type === 'ACTION') history.push(stringify(message));
     savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);
   }, 0);

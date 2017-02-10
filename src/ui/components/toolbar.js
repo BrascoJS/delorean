@@ -1,6 +1,5 @@
 import React from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import Slider from 'material-ui/Slider';
 import StateChangeStepper from './stateChangeStepper';
 import SliderBar from './slider';
 import Cytoscape from './cy';
@@ -14,8 +13,9 @@ const styles = {
     fontWeight: 400,
   },
   text: {
-    marginLeft: 5
-  }
+    marginLeft: 5,
+    paddingTop: 10
+  },
 };
 
 class Toolbar extends Component{

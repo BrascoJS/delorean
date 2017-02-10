@@ -17,7 +17,7 @@ function dev(store, config) {
       }
     };
     /* eslint-enable */
-  } else console.warn(`Passed ${typeof store} to BRASCO, which is not an observable.`);
+  } else console.warn(`Passed ${typeof store} to Delorean, which is not an observable.`);
   return store;
 }
 
