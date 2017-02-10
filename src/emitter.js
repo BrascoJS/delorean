@@ -1,11 +1,11 @@
 import { stringify } from 'jsan';
 import { setValue } from './utils.js';
-import {addNode} from './ui/components/Tree.js';
+import { addNode } from './ui/components/Tree.js';
 
 let savedPos = null;
 let savedFuncs = {};
 let lastRecordedIndex = -1;
-export let history = [];
+export const history = [];
 
 export function handleMessages(message, listeners, item = savedPos, whodis = null) {
   if (!message.payload) message.payload = message.action;
@@ -20,9 +20,9 @@ export function handleMessages(message, listeners, item = savedPos, whodis = nul
         thisFunc(message);
       } else {
         if (message.type === 'ACTION') {
-          if(item) item = item.toString();
-          else if(savedPos) item = savedPos.toString();
-         savedPos = addNode(item, stringify(message), history);
+          if (item) item = item.toString();
+          else if (savedPos) item = savedPos.toString();
+          savedPos = addNode(item, stringify(message), history);
         }
         listeners[id].forEach(fn => { fn(message); });
       }
