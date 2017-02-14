@@ -1,23 +1,26 @@
 import React from 'react';
 import Slider from 'material-ui/Slider';
 
+const styles = {
+  slider: {
+    width: '95%',
+    margin: '0 auto'
+  }
+};
+
 const SliderBar = (props) => {
   const { getData, sendUpdate, history, getCurAction } = props;
-  let stepNum;
-
-  if (history.length < 2) stepNum = 0;
-  else stepNum = 1 / (history.length - 1);
 
   function updater(newPos) {
     getData();
-    const index = Math.round(newPos / stepNum);
+    const index = Math.round(newPos / (1 / (history.length - 1)));
     sendUpdate(index, 'JUMP_TO_STATE');
     getCurAction();
   }
 
   return (
     <Slider
-      step={stepNum}
+      style={styles.slider}
       value={1}
       onChange={(e, newPos) => { updater(newPos); }}
     />
