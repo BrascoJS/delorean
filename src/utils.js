@@ -34,9 +34,9 @@ export function getName(obj) {
 
 /* eslint-disable no-param-reassign */
 export const silently = (fn, store) => {
-  store.__isRemotedevAction = true;
+  store.__isDeloreanAction = true;
   fn();
-  delete store.__isRemotedevAction;
+  delete store.__isDeloreanAction;
 };
 
 function setValueAction(store, state) {
@@ -51,8 +51,8 @@ function setValueAction(store, state) {
   }, store);
   return state;
 }
-setValueAction.__isRemotedevAction = true;
-export const setValue = mobx.action('@@remotedev', setValueAction);
+setValueAction.__isDeloreanAction = true;
+export const setValue = mobx.action('@@delorean', setValueAction);
 /* eslint-enable */
 
 export function getMethods(obj) {

@@ -1,6 +1,6 @@
 {
   "name": "mobx-delorean",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "MobX time travel debugger and visualization tool",
   "main": "lib/index.js",
   "files": [
@@ -9,10 +9,9 @@
     "dist"
   ],
   "scripts": {
-    "clean": "rimraf lib",
     "build:lib": "babel src --out-dir lib",
-    "build:umd": "webpack src/index.js dist/mobx-remotedev.js --config webpack.config.development.js",
-    "build:umd:min": "webpack src/index.js dist/mobx-remotedev.min.js --config webpack.config.production.js",
+    "build:umd": "webpack src/index.js dist/mobx-delorean.js --config webpack.config.development.js",
+    "build:umd:min": "webpack src/index.js dist/mobx-delorean.min.js --config webpack.config.production.js",
     "build": "npm run build:lib && npm run build:umd && npm run build:umd:min",
     "lint": "eslint src test",
     "prepublish": "npm run build"
@@ -55,14 +54,15 @@
     "babel-preset-es2015-loose": "^7.0.0",
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.23.0",
+    "chai": "^3.5.0",
     "eslint": "^2.13.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.9.2",
     "eslint-plugin-jsx-a11y": "^1.5.3",
     "eslint-plugin-react": "^5.2.2",
-    "expect": "^1.20.1",
-    "mocha": "^2.5.3",
-    "rimraf": "^2.5.2",
+    "expect": "^1.20.2",
+    "mocha": "^3.2.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.1"
   },

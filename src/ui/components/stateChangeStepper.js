@@ -3,7 +3,6 @@ import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import ExpandTransition from 'material-ui/internal/ExpandTransition';
-import Steps from './stateSteps';
 
 class StateChangeStepper extends Component {
   constructor(props) {
@@ -11,38 +10,21 @@ class StateChangeStepper extends Component {
     this.state = {
       loading: false,
       finished: false,
-      steps: [],
       stepIndex: 0
     };
   }
 
-/* May have to change this function from switch statement to something else
-in order to account for varying array lengths */
   getStepContent(stepIndex) {
     const { history, curIndex, curAction } = this.props;
 
-    switch (stepIndex) {
-      case 0:
-        return (
-          <div>
-            {curAction}
-          </div>
-        );
-      case 1:
-        return (
-          <div>
-            {curAction}
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            {curAction}
-          </div>
-        );
-      default:
-        return 'Click the buttons to undo/redo consecutive actions';
+    if (stepIndex >= 0 && stepIndex <= history.length - 1) {
+      return (
+        <div>
+          {curAction}
+        </div>
+      );
     }
+    return 'Click the buttons to undo/redo consecutive actions';
   }
 
   dummyAsync = (cb) => {
@@ -61,7 +43,7 @@ in order to account for varying array lengths */
       this.dummyAsync(() => this.setState({
         loading: false,
         stepIndex: stepIndex + 1,
-        finished: stepIndex >= 2,
+        finished: stepIndex >= history.length - 1,
       }));
       sendUpdate(newIndex, 'JUMP_TO_STATE');
       getCurAction();
@@ -86,7 +68,7 @@ in order to account for varying array lengths */
 
   renderContent() {
     const { finished, stepIndex } = this.state;
-    const { sendUpdate, getCurAction } = this.props;
+    const { history, sendUpdate, getCurAction } = this.props;
     const contentStyle = { margin: '0 16px', overflow: 'hidden' };
 
     if (finished) {
@@ -120,7 +102,7 @@ in order to account for varying array lengths */
             style={{ marginRight: 12 }}
           />
           <RaisedButton
-            label={stepIndex === 2 ? 'Finish' : 'Redo'}
+            label={stepIndex === history.length - 1 ? 'Finish' : 'Redo'}
             primary
             onClick={this.handleNext}
           />
@@ -132,24 +114,8 @@ in order to account for varying array lengths */
   render() {
     const { loading, stepIndex } = this.state;
 
-    // const stateSteps = this.state.steps.map((step, index) => {
-    //   return <Steps key={index} />
-    // })
-
     return (
       <div style={{ width: '100%', maxWidth: 700, margin: 'auto' }}>
-        <Stepper activeStep={stepIndex}>
-          <Step>
-            <StepLabel>Initial State</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>State Change 1</StepLabel>
-          </Step>
-          <Step>
-            <StepLabel>State Change 2</StepLabel>
-          </Step>
-
-        </Stepper>
         <ExpandTransition loading={loading} open>
           {this.renderContent()}
         </ExpandTransition>

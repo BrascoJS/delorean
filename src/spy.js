@@ -61,11 +61,11 @@ export default function spy(store, config) {
         return;
       }
       if (!stores[objName]) objName = fallbackStoreName;
-      if (!stores[objName] || stores[objName].__isRemotedevAction) {
+      if (!stores[objName] || stores[objName].__isDeloreanAction) {
         schedule(objName);
         return;
       }
-      if (change.fn && change.fn.__isRemotedevAction) {
+      if (change.fn && change.fn.__isDeloreanAction) {
         schedule(objName);
         return;
       }

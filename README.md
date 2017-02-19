@@ -1,5 +1,9 @@
+![Delorean logo](link)
+
 # Delorean
-An intuitive, in-app MobX + React developer tool employing time travel debugging and undo/redo actions. Quickly and easily gain insight into any MobX-React project, with just two lines of code.
+An intuitive, in-app MobX + React developer tool employing time travel debugging and undo/redo actions. Quickly and easily gain insight into MobX-React projects, with just three lines of code.
+
+![Time Travel](link "Delorean time travel")
 
 # Features
 - Flexible time travel functionality
@@ -53,7 +57,7 @@ export default delorean(YourStore, [config]);
       - **whitelist** any other actions will be ignored by Delorean
       - **blacklist** Delorean will ignore this action
       
-__Note__: Delorean relies on wrapping your MobX store export in order to track its obersvables and parse its dependency tree at runtime. If you are using multiple stores, you can wrap them separately and Delorean will track them in a singular UI.
+__Note__: Delorean relies on wrapping your MobX store export in order to track its observables and parse its dependency tree at runtime. If you are using multiple stores, you can wrap them separately and Delorean will track them in a singular UI.
 
 Open your MobX app in the browser and notice the Delorean toolbar at the top of your app. In order from left to right:
 
@@ -61,4 +65,4 @@ Open your MobX app in the browser and notice the Delorean toolbar at the top of 
 
 2) Undo/Redo Actions - Step forward and back through your application's state one action at a time with specific details about each change.
 
-3) Store Structure Visualizer - Open a new tab with a rich heirarchy visualization of your MobX store's dependency tree. (coming soon)
+3) Store Structure Visualizer - Open a new tab with a rich heirarchy visualization of your MobX store's dependency tree. (in development)
