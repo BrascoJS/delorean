@@ -1,20 +1,29 @@
 import { stringify } from 'jsan';
 import { setValue } from './utils.js';
+import { addNode } from './ui/components/Tree.js';
 
-const savedFuncs = {};
+let savedPos = null;
+let savedFuncs = {};
+let lastRecordedIndex = -1;
 export const history = [];
 
-export function handleMessages(message, listeners, item = null) {
+export function handleMessages(message, listeners, item = savedPos, whodis = null) {
   if (!message.payload) message.payload = message.action;
   Object.keys(listeners).forEach(id => {
     if (message.instanceId && id !== message.instanceId) return;
     if (typeof listeners[id] === 'function') listeners[id](message);
     else {
-      if (item) {
-        const key = Object.keys(listeners)[0];
-        const thisFunc = savedFuncs[key];
+      if (whodis) {
+        savedPos = item;
+        let key = Object.keys(listeners)[0];
+        let thisFunc = savedFuncs[key];
         thisFunc(message);
       } else {
+        if (message.type === 'ACTION') {
+          if (item) item = item.toString();
+          else if (savedPos) item = savedPos.toString();
+          savedPos = addNode(item, stringify(message), history);
+        }
         listeners[id].forEach(fn => { fn(message); });
       }
     }
@@ -31,7 +40,6 @@ function formatAction(action) {
   return formattedAction;
 }
 
-
 function send(action, state, options, type, instanceId, listeners) {
   setTimeout(() => {
     const message = {
@@ -42,8 +50,8 @@ function send(action, state, options, type, instanceId, listeners) {
       name: options.name,
       location: window.location.hash
     };
-    if (message.type === 'ACTION') history.push(stringify(message));
-    const key = Object.keys(listeners)[0];
+    let key = Object.keys(listeners)[0];
+    // if (message.type === 'ACTION') history.push(stringify(message));
     savedFuncs[key] = listeners[key][0];
     handleMessages(message, listeners);
   }, 0);
