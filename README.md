@@ -4,7 +4,7 @@
 
 
 # Delorean
-An intuitive, in-app MobX + React developer tool employing time travel debugging and undo/redo actions. Quickly and easily gain insight into MobX-React projects, with just three lines of code.
+An intuitive, in-app MobX + React developer tool employing time travel debugging and undo/redo actions. Quickly and easily gain insight into MobX-React projects, in just three easy steps.
 
 ![Time Travel](https://github.com/BrascoJS/delorean/blob/master/assets/timeTravel.gif "Delorean time travel")
 
