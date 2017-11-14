@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import cytoscape from 'cytoscape';
 import { A } from './Tree'; // can we call this something more insightful
@@ -59,8 +60,8 @@ class Cytoscape extends Component {
 }
 
 Cytoscape.PropTypes = {
-  sendUpdate: React.PropTypes.func,
-  selected: React.PropTypes.number
+  sendUpdate: PropTypes.func,
+  selected: PropTypes.number
 };
 
 export default Cytoscape;

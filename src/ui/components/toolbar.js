@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import StateChangeStepper from './stateChangeStepper';
@@ -77,12 +78,12 @@ class Toolbar extends Component {
 }
 
 Toolbar.PropTypes = {
-  getData: React.PropTypes.func,
-  sendUpdate: React.PropTypes.func,
-  getCurAction: React.PropTypes.func,
-  history: React.PropTypes.array,
-  curIndex: React.PropTypes.number,
-  curAction: React.PropTypes.string
+  getData: PropTypes.func,
+  sendUpdate: PropTypes.func,
+  getCurAction: PropTypes.func,
+  history: PropTypes.array,
+  curIndex: PropTypes.number,
+  curAction: PropTypes.string
 };
 
 export default Toolbar;
