@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Step, Stepper, StepLabel } from 'material-ui/Stepper';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -125,12 +126,12 @@ class StateChangeStepper extends Component {
 }
 
 StateChangeStepper.propTypes = {
-  sendUpdate: React.PropTypes.func,
-  getData: React.PropTypes.func,
-  getCurAction: React.PropTypes.func,
-  curIndex: React.PropTypes.number,
-  history: React.PropTypes.array,
-  curAction: React.PropTypes.string
+  sendUpdate: PropTypes.func,
+  getData: PropTypes.func,
+  getCurAction: PropTypes.func,
+  curIndex: PropTypes.number,
+  history: PropTypes.array,
+  curAction: PropTypes.string
 };
 
 export default StateChangeStepper;

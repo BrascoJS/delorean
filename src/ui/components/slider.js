@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import Slider from 'material-ui/Slider';
 
@@ -28,10 +29,10 @@ const SliderBar = (props) => {
 };
 
 SliderBar.propTypes = {
-  getData: React.PropTypes.func,
-  sendUpdate: React.PropTypes.func,
-  getCurAction: React.PropTypes.func,
-  history: React.PropTypes.array
+  getData: PropTypes.func,
+  sendUpdate: PropTypes.func,
+  getCurAction: PropTypes.func,
+  history: PropTypes.array
 };
 
 export default SliderBar;
