@@ -51,7 +51,7 @@ import { delorean } from 'mobx-delorean';
 export default delorean(YourStore, [config]);
 ```
 
-####config
+#### config
   - arguments
     - **name** (*string*): the instance name to be shown in the toolbar
     - **onlyActions** (*boolean*): if true, Delorean will only track actions. Using MobX in strict mode causes a default to true
